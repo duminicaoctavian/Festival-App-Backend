@@ -28,7 +28,7 @@ app.post('/artists', (req, res) => {
 })
 
 app.get('/artists', (req, res) => {
-  Artist.find({}).then((artists) => {
+  Artist.find({}).sort('name').then((artists) => {
     res.send({artists})
   }, (e) => {
     res.status(400).send(e)
