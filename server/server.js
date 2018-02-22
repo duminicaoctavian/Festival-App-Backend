@@ -13,6 +13,20 @@ const port = process.env.PORT
 
 app.use(bodyParser.json())
 
+app.post('/artists', (req, res) => {
+  var artist = new Artist({
+    name: req.body.name,
+    genre: req.body.genre,
+    description: req.body.description
+  })
+
+  artist.save().then((doc) => {
+    res.send(doc)
+  }, (err) => {
+    res.status(400).send(err)
+  })
+})
+
 app.get('/artists', (req, res) => {
   Artist.find({}).then((artists) => {
     res.send({artists})
