@@ -18,6 +18,12 @@ var Artist = mongoose.model('Artist', {
     required: true,
     minlength: 1,
     trim: true
+  },
+  stage: {
+    type: String,
+    required: true,
+    minlength: 1,
+    trim: true
   }
 })
 

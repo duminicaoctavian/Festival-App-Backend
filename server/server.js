@@ -17,7 +17,8 @@ app.post('/artists', (req, res) => {
   var artist = new Artist({
     name: req.body.name,
     genre: req.body.genre,
-    description: req.body.description
+    description: req.body.description,
+    stage: req.body.stage
   })
 
   artist.save().then((doc) => {
@@ -32,6 +33,21 @@ app.get('/artists', (req, res) => {
     res.send({artists})
   }, (e) => {
     res.status(400).send(e)
+  })
+})
+
+app.get('/artists/:stage', (req, res) => {
+  var stage = req.params.stage
+
+  Artist.find({
+    stage: stage,
+  }).then((artists) => {
+    if (artists.length === 0) {
+      return res.status(404).send()
+    }
+    res.send({artists})
+  }).catch((e) => {
+    res.status(400).send()
   })
 })
 
