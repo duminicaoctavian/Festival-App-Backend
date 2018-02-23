@@ -41,7 +41,7 @@ app.get('/artists/:stage', (req, res) => {
 
   Artist.find({
     stage: stage,
-  }).then((artists) => {
+  }).sort('name').then((artists) => {
     if (artists.length === 0) {
       return res.status(404).send()
     }
