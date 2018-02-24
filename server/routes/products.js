@@ -41,6 +41,7 @@ router.get('/', (req, res, next) => {
             name: doc.name,
             price: doc.price,
             productImage: doc.productImage,
+            category: doc.category,
             _id: doc._id
           }
         })
@@ -60,7 +61,8 @@ router.post('/', upload.single('productImage'), (req, res, next) => {
     _id: new mongoose.Types.ObjectId(),
     name: req.body.name,
     price: req.body.price,
-    productImage: req.file.path
+    productImage: req.file.path,
+    category: req.body.category
   })
   product
     .save()
@@ -71,6 +73,7 @@ router.post('/', upload.single('productImage'), (req, res, next) => {
         createdProduct: {
             name: result.name,
             price: result.price,
+            category: result.category,
             _id: result._id
         }
       })
