@@ -86,27 +86,22 @@ router.post('/', upload.single('productImage'), (req, res, next) => {
     })
 })
 
-router.get('/:productId', (req, res, next) => {
-  const id = req.params.productId
-  Product.findById(id)
-    .select('name price _id productImage')
-    .exec()
-    .then(doc => {
-      console.log('From database', doc)
-      if (doc) {
-        res.status(200).json({
-            product: doc
-        })
-      } else {
-        res
-          .status(404)
-          .json({ message: 'No valid entry found for provided ID' });
-      }
-    })
-    .catch(err => {
-      console.log(err)
-      res.status(500).json({ error: err })
-    })
+router.get('/:category', (req, res) => {
+  var category = req.params.category
+
+  Product.find({
+    category: category,
+  }).sort('name')
+  .select('name price _id productImage')
+  .exec()
+  .then((products) => {
+    if (products.length === 0) {
+      return res.status(404).send()
+    }
+    res.send({products})
+  }).catch((e) => {
+    res.status(400).send()
+  })
 })
 
 module.exports = router
