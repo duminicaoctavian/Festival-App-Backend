@@ -1,10 +1,11 @@
 const express = require('express')
-const mongoose = require('mongoose')
+var {mongoose} = require('./../db/mongoose')
 var {User} = require('../models/user.js')
 const router = express.Router()
 const _ = require('lodash')
 const bodyParser = require('body-parser')
 var {authenticate} = require('./../middleware/authenticate.js')
+const {ObjectID} = require('mongodb')
 
 router.post('/', async (req, res) => {
   try{
