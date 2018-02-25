@@ -5,21 +5,17 @@ const router = express.Router()
 const _ = require('lodash')
 const bodyParser = require('body-parser')
 var {authenticate} = require('./../middleware/authenticate.js')
-const {ObjectID} = require('mongodb')
 
 router.post('/', async (req, res) => {
-
-  var body = _.pick(req.body, ['email', 'password']) // lets only these to be changed
-  var user = new User(body)
-
-  user.save().then(() => {
-    // res.send(user)
-    return user.generateAuthToken()
-  }).then((token) => {
-    res.header('x-auth', token).send(user) // x- = custom header
-  }).catch((e) => {
+  try{
+    const body = _.pick(req.body, ['email', 'password'])
+    const user = new User(body)
+    await user.save()
+    const token = await user.generateAuthToken()
+    res.header('x-auth', token).send(user)
+  } catch(e) {
     res.status(400).send(e)
-  })
+  }
 })
 
 router.get('/me', authenticate, (req, res) => {
