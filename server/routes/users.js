@@ -35,8 +35,11 @@ router.post('/login', async (req, res) => {
 
 router.delete('/me/token', authenticate, async (req, res) => {
   try {
+    const message = {
+      message: "Succesfully logged out user"
+    }
     await req.user.removeToken(req.token)
-    res.status(200).send()
+    res.status(200).send(message)
   } catch (e) {
     res.status(400).send()
   }

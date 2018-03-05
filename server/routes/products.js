@@ -4,6 +4,8 @@ const multer = require('multer')
 const Product = require('../models/product')
 const router = express.Router()
 
+var {authenticate} = require('./../middleware/authenticate.js')
+
 const storage = multer.diskStorage({
   destination: (req, file, callback) => {
     callback(null, './uploads/')
@@ -86,7 +88,7 @@ router.post('/', upload.single('productImage'), (req, res, next) => {
     })
 })
 
-router.get('/:category', (req, res) => {
+router.get('/:category', authenticate, (req, res) => {
   var category = req.params.category
 
   Product.find({

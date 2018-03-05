@@ -3,6 +3,8 @@ const mongoose = require('mongoose')
 const Artist = require('../models/artist.js')
 const router = express.Router()
 
+var {authenticate} = require('./../middleware/authenticate.js')
+
 router.post('/', (req, res) => {
   var artist = new Artist({
     _id: new mongoose.Types.ObjectId(),
@@ -27,7 +29,7 @@ router.get('/', (req, res) => {
   })
 })
 
-router.get('/:stage', (req, res) => {
+router.get('/:stage', authenticate, (req, res) => {
   var stage = req.params.stage
 
   Artist.find({
