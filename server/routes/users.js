@@ -45,4 +45,15 @@ router.delete('/me/token', authenticate, async (req, res) => {
   }
 })
 
+router.get('/:email', (req, res) => {
+  User
+    .findOne({ 'email': req.params.email })
+    .exec((err, userData) => {
+      if (err) {
+        res.status(500).json({ message: err });
+      }
+      res.status(200).json(userData);
+    })
+})
+
 module.exports = router
