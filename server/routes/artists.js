@@ -29,7 +29,7 @@ router.get('/', (req, res) => {
   })
 })
 
-router.get('/:stage', authenticate, (req, res) => {
+router.get('/:stage', (req, res) => {
   var stage = req.params.stage
 
   Artist.find({
