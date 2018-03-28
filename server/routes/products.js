@@ -118,7 +118,7 @@ router.post('/', (req, res, next) => {
     })
 })
 
-router.get('/:category', authenticate, (req, res) => {
+router.get('/:category', (req, res) => {
   var category = req.params.category
 
   Product.find({
