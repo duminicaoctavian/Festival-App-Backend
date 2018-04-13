@@ -13,7 +13,8 @@ router.post('/', (req, res) => {
     description: req.body.description,
     stage: req.body.stage,
     day: req.body.day,
-    time: req.body.time
+    time: req.body.time,
+    artistImage: req.body.artistImage
   })
 
   artist.save().then((doc) => {

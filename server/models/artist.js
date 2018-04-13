@@ -37,6 +37,12 @@ const artistSchema = mongoose.Schema({
     required: true,
     minlength: 1,
     trim: true
+  },
+  artistImage: {
+    type: String,
+    required: true,
+    minlength: 1,
+    trim: true
   }
 })
 
