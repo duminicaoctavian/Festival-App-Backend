@@ -11,7 +11,9 @@ router.post('/', (req, res) => {
     name: req.body.name,
     genre: req.body.genre,
     description: req.body.description,
-    stage: req.body.stage
+    stage: req.body.stage,
+    day: req.body.day,
+    time: req.body.time
   })
 
   artist.save().then((doc) => {
@@ -35,6 +37,23 @@ router.get('/:stage', (req, res) => {
   Artist.find({
     stage: stage,
   }).sort('name').then((artists) => {
+    if (artists.length === 0) {
+      return res.status(404).send()
+    }
+    res.send({artists})
+  }).catch((e) => {
+    res.status(400).send()
+  })
+})
+
+router.get('/:stage/:day', (req, res) => {
+  var stage = req.params.stage
+  var day = req.params.day
+
+  Artist.find({
+    stage: stage,
+    day: day,
+  }).sort('time').then((artists) => {
     if (artists.length === 0) {
       return res.status(404).send()
     }

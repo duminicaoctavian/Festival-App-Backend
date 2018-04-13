@@ -25,6 +25,18 @@ const artistSchema = mongoose.Schema({
     required: true,
     minlength: 1,
     trim: true
+  },
+  day: {
+    type: String,
+    required: true,
+    minlength: 1,
+    trim: true
+  },
+  time: {
+    type: String,
+    required: true,
+    minlength: 1,
+    trim: true
   }
 })
 
