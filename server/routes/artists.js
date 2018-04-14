@@ -1,11 +1,23 @@
 const express = require('express')
 const mongoose = require('mongoose')
+const moment = require('moment')
 const Artist = require('../models/artist.js')
 const router = express.Router()
 
 var {authenticate} = require('./../middleware/authenticate.js')
 
 router.post('/', (req, res) => {
+  var dateString
+  let momentTime = moment(req.body.time, 'hh:mm')
+  let adjustedMomentTime = moment([1970,0,1]).hour(momentTime.hour()).minute(momentTime.minute())
+
+  if ((req.body.time.localeCompare('00:00') >= 0) && (req.body.time.localeCompare('12:00') <= 0)) {
+    adjustedMomentTime.add(1, 'day')
+    dateString = adjustedMomentTime.format('DD-MM-YYYY HH:mm')
+  } else {
+    dateString = adjustedMomentTime.format('DD-MM-YYYY HH:mm')
+  }
+
   var artist = new Artist({
     _id: new mongoose.Types.ObjectId(),
     name: req.body.name,
@@ -13,7 +25,7 @@ router.post('/', (req, res) => {
     description: req.body.description,
     stage: req.body.stage,
     day: req.body.day,
-    time: req.body.time,
+    time: dateString,
     artistImage: req.body.artistImage
   })
 
