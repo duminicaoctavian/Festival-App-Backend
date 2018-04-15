@@ -33,7 +33,7 @@ router.post('/login', async (req, res) => {
   }
 })
 
-router.delete('/me/token', async (req, res) => {
+router.delete('/me/token', authenticate, async (req, res) => {
   try {
     const message = {
       message: "Succesfully logged out user"
