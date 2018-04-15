@@ -1,5 +1,7 @@
 require('./config/config.js')
 
+//./mongod --dbpath ~/mongo-data
+
 const _ = require('lodash')
 const express = require('express')
 const bodyParser = require('body-parser')

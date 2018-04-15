@@ -12,7 +12,7 @@ router.post('/', async (req, res) => {
     const user = new User(body)
     await user.save()
     const token = await user.generateAuthToken()
-    res.header('x-auth', token).send(user)
+    res.header('X-Auth', token).send(user)
   } catch(e) {
     res.status(400).send(e)
   }
@@ -27,7 +27,7 @@ router.post('/login', async (req, res) => {
     const body = _.pick(req.body, ['username', 'email', 'password'])
     const user = await User.findByCredentials(body.email, body.password)
     const token = await user.generateAuthToken()
-    res.header('x-auth', token).send(user)
+    res.header('X-Auth', token).send(user)
   } catch (e) {
     res.status(400).send()
   }
