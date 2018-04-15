@@ -8,7 +8,7 @@ var {authenticate} = require('./../middleware/authenticate.js')
 
 router.post('/', async (req, res) => {
   try{
-    const body = _.pick(req.body, ['email', 'password'])
+    const body = _.pick(req.body, ['username', 'email', 'password'])
     const user = new User(body)
     await user.save()
     const token = await user.generateAuthToken()
@@ -24,7 +24,7 @@ router.get('/me', authenticate, (req, res) => {
 
 router.post('/login', async (req, res) => {
   try{
-    const body = _.pick(req.body, ['email', 'password'])
+    const body = _.pick(req.body, ['username', 'email', 'password'])
     const user = await User.findByCredentials(body.email, body.password)
     const token = await user.generateAuthToken()
     res.header('x-auth', token).send(user)
