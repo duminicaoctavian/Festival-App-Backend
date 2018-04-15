@@ -23,11 +23,10 @@ router.post('/', (req, res) => {
 
 router.get('/:channelId', (req, res) => {
   Message
-    .find({ 'channelId' : req.params.channelId }, (err, messages) => {
-      if(err) {
-        res.status(500).json({ message: err })
-      }
-      res.status(200).json(messages)
+    .find({ 'channelId' : req.params.channelId }).sort('timeStamp').then((messages) => {
+      res.send(messages)
+    }, (e) => {
+      res.status(400).send(e)
     })
 })
 
