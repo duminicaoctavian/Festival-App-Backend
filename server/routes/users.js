@@ -67,12 +67,14 @@ router.patch('/:id', (req, res) => {
 
   var username = req.body.username
   var password = req.body.password
+  var imageUrl = req.body.imageUrl
   console.log(password)
 
   if (password === undefined || password === "") {
     console.log("HERE")
     var body = {
-      username : username
+      username : username,
+      imageUrl: imageUrl
     }
 
     User.findOneAndUpdate({_id: id}, {$set: body}, {new: true}).then((user) => {
@@ -93,7 +95,8 @@ router.patch('/:id', (req, res) => {
 
           var body = {
             username : username,
-            password : password
+            password : password,
+            imageUrl: imageUrl
           }
 
           User.findOneAndUpdate({_id: id}, {$set: body}, {new: true}).then((user) => {

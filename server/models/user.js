@@ -28,6 +28,11 @@ var UserSchema = new mongoose.Schema({
     require: true,
     minlength: 6
   },
+  imageUrl: {
+    type: String,
+    required: false,
+    trim: true
+  },
   tokens: [{
     access: {
       type: String,
@@ -44,7 +49,7 @@ UserSchema.methods.toJSON = function () {
   var user = this
   var userObject = user.toObject()
 
-  return _.pick(userObject, ['_id', 'username', 'email'])
+  return _.pick(userObject, ['_id', 'username', 'email', 'imageUrl'])
 }
 
 UserSchema.methods.generateAuthToken = function () {
