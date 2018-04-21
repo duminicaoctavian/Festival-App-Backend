@@ -10,7 +10,12 @@ const bcrypt = require('bcryptjs')
 
 router.post('/', async (req, res) => {
   try{
-    const body = _.pick(req.body, ['username', 'email', 'password'])
+    var body = {
+      username: req.body.username,
+      email: req.body.email,
+      password: req.body.password,
+      imageUrl: ""
+    }
     const user = new User(body)
     await user.save()
     const token = await user.generateAuthToken()
