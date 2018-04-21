@@ -12,6 +12,7 @@ const artistRoutes = require('./routes/artists.js')
 const usersRoutes = require('./routes/users.js')
 const channelsRoutes = require('./routes/channels.js')
 const messagesRoutes = require('./routes/messages.js')
+const locationRoutes = require('./routes/locations.js')
 const newsRoutes = require('./routes/news.js')
 const Message = require('./models/message.js')
 const port = process.env.PORT
@@ -28,6 +29,7 @@ app.use('/users', usersRoutes)
 app.use('/channels', channelsRoutes)
 app.use('/messages', messagesRoutes)
 app.use('/news', newsRoutes)
+app.use('/locations', locationRoutes)
 
 var typingUsers = {};
 
