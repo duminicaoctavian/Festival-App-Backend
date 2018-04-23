@@ -5,7 +5,6 @@ const User = require('./user.js')
 const ObjectId = mongoose.Schema.Types.ObjectId
 
 var locationSchema = new mongoose.Schema({
-  _id: mongoose.Schema.Types.ObjectId,
   latitude: {
     type: String,
     required: true,
@@ -36,13 +35,10 @@ var locationSchema = new mongoose.Schema({
     type: String,
     required: true,
     trim: true,
-    minlength: 10
+    minlength: 1
   },
   images: [{
-    image: {
-      type: String,
-      required: true
-    }
+    type: String
   }]
 })
 

@@ -15,6 +15,8 @@ const messagesRoutes = require('./routes/messages.js')
 const locationRoutes = require('./routes/locations.js')
 const newsRoutes = require('./routes/news.js')
 const Message = require('./models/message.js')
+const Location = require('./models/location.js')
+
 const port = process.env.PORT
 
 var app = express()
@@ -86,6 +88,36 @@ io.on('connection', (socket) => {
 
       io.emit("messageCreated",  msg.messageBody, msg.userId, msg.channelId, msg.userName, msg.id, msg.timeStamp);
     })
+  })
+
+  socket.on('newLocation', function(latitude, longitude, userId, title, address, description, images) {
+    console.log(images)
+    console.log(latitude)
+    console.log(longitude)
+    console.log(userId)
+    console.log(title)
+    console.log(address)
+    console.log(description)
+
+    let newLocation = new Location({
+      latitude: latitude,
+      longitude: longitude,
+      userId: userId,
+      title: title,
+      address: address,
+      description: description,
+      images: images
+    })
+
+    newLocation.save(function(err, loc) {
+
+      console.log(loc)
+
+      console.log('new location sent')
+
+      io.emit("locationCreated",loc._id, loc.latitude, loc.longitude, loc.userId, loc.title, loc.address, loc.description, loc.images)
+    })
+
   })
 })
 
