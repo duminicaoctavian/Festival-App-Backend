@@ -1,16 +1,75 @@
-var { User } = require('./../models/user.js')
+let { User } = require('./../models/user')
+let { Header } = require('./../utils/constants')
 
-var authenticate = async (req, res, next) => {
-	var token = req.header('X-Auth')
+var authenticateAsAdmin = async (request, response, next) => {
+	var token = request.header(Header.admin)
 
 	try {
 		let user = await User.findByToken(token)
-		req.user = user
-		req.token = token
+		request.user = user
+		request.token = token
 		next()
-	} catch (e) {
-		res.status(401).send()
+	} catch (error) {
+		response.status(401).send()
 	}
 }
 
-module.exports = { authenticate }
+var authenticateAsClient = async (request, response, next) => {
+	var token = request.header(Header.client)
+
+	try {
+		let user = await User.findByToken(token)
+		request.user = user
+		request.token = token
+		next()
+	} catch (error) {
+		response.status(401).send()
+	}
+}
+
+var authenticateAsArtist = async (request, response, next) => {
+	var token = request.header(Header.artist)
+
+	try {
+		let user = await User.findByToken(token)
+		request.user = user
+		request.token = token
+		next()
+	} catch (error) {
+		response.status(401).send()
+	}
+}
+
+var authenticateAsEmployee = async (request, response, next) => {
+	var token = request.header(Header.employee)
+
+	try {
+		let user = await User.findByToken(token)
+		request.user = user
+		request.token = token
+		next()
+	} catch (error) {
+		response.status(401).send()
+	}
+}
+
+var authenticateAsOrganizer = async (request, response, next) => {
+	var token = request.header(Header.organizer)
+
+	try {
+		let user = await User.findByToken(token)
+		request.user = user
+		request.token = token
+		next()
+	} catch (error) {
+		response.status(401).send()
+	}
+}
+
+module.exports = {
+	authenticateAsAdmin, 
+	authenticateAsClient,
+	authenticateAsArtist,
+	authenticateAsEmployee,
+	authenticateAsOrganizer
+}
