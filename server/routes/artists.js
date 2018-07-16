@@ -1,8 +1,8 @@
-const express = require('express')
-const mongoose = require('mongoose')
-const moment = require('moment')
-const Artist = require('../models/artist.js')
-const router = express.Router()
+let express = require('express')
+let mongoose = require('mongoose')
+let moment = require('moment')
+let Artist = require('../models/artist.js')
+let router = express.Router()
 
 var { authenticate } = require('./../middleware/authenticate.js')
 

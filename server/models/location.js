@@ -1,8 +1,8 @@
-const mongoose = require('mongoose')
-const User = require('./user.js')
+let mongoose = require('mongoose')
+let User = require('./user.js')
 
 
-const ObjectId = mongoose.Schema.Types.ObjectId
+let ObjectId = mongoose.Schema.Types.ObjectId
 
 var locationSchema = new mongoose.Schema({
 	latitude: {

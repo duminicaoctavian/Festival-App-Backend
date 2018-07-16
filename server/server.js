@@ -2,22 +2,22 @@ require('./config/config.js')
 
 //./mongod --dbpath ~/mongo-data
 
-const _ = require('lodash')
-const express = require('express')
-const bodyParser = require('body-parser')
-const socketIO = require('socket.io')
-const http = require('http')
-const productRoutes = require('./routes/products.js')
-const artistRoutes = require('./routes/artists.js')
-const usersRoutes = require('./routes/users.js')
-const channelsRoutes = require('./routes/channels.js')
-const messagesRoutes = require('./routes/messages.js')
-const locationRoutes = require('./routes/locations.js')
-const newsRoutes = require('./routes/news.js')
-const Message = require('./models/message.js')
-const Location = require('./models/location.js')
+let _ = require('lodash')
+let express = require('express')
+let bodyParser = require('body-parser')
+let socketIO = require('socket.io')
+let http = require('http')
+let productRoutes = require('./routes/products.js')
+let artistRoutes = require('./routes/artists.js')
+let usersRoutes = require('./routes/users.js')
+let channelsRoutes = require('./routes/channels.js')
+let messagesRoutes = require('./routes/messages.js')
+let locationRoutes = require('./routes/locations.js')
+let newsRoutes = require('./routes/news.js')
+let Message = require('./models/message.js')
+let Location = require('./models/location.js')
 
-const port = process.env.PORT
+let port = process.env.PORT
 
 var app = express()
 var server = http.createServer(app)

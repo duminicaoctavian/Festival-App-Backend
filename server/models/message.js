@@ -1,11 +1,11 @@
-const mongoose = require('mongoose')
-const User = require('./user.js')
-const Channel = require('./channel.js')
+let mongoose = require('mongoose')
+let User = require('./user.js')
+let Channel = require('./channel.js')
 
-const Schema = mongoose.Schema;
-const ObjectId = mongoose.Schema.Types.ObjectId;
+let Schema = mongoose.Schema;
+let ObjectId = mongoose.Schema.Types.ObjectId;
 
-const messageSchema = new Schema({
+let messageSchema = new Schema({
 	messageBody: {
 		type: String,
 		default: ""

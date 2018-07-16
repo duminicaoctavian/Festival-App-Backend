@@ -1,7 +1,7 @@
-const mongoose = require('mongoose')
-const Schema = mongoose.Schema;
+let mongoose = require('mongoose')
+let Schema = mongoose.Schema;
 
-const channelSchema = new Schema({
+let channelSchema = new Schema({
 	name: {
 		type: String,
 		default: ""

@@ -1,6 +1,6 @@
-const mongoose = require('mongoose')
+let mongoose = require('mongoose')
 
-const artistSchema = mongoose.Schema({
+let artistSchema = mongoose.Schema({
 	_id: mongoose.Schema.Types.ObjectId,
 	name: {
 		type: String,

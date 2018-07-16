@@ -1,7 +1,7 @@
-const express = require('express')
-const mongoose = require('mongoose')
-const Product = require('../models/product')
-const router = express.Router()
+let express = require('express')
+let mongoose = require('mongoose')
+let Product = require('../models/product')
+let router = express.Router()
 
 var { authenticate } = require('./../middleware/authenticate.js')
 
@@ -10,7 +10,7 @@ router.get('/', (req, res, next) => {
 		.select('name price _id productImage')
 		.exec()
 		.then(docs => {
-			const response = {
+			let response = {
 				count: docs.length,
 				products: docs.map(doc => {
 					return {
@@ -33,7 +33,7 @@ router.get('/', (req, res, next) => {
 })
 
 // router.post('/', upload.single('productImage'), (req, res, next) => {
-//   const product = new Product({
+//   let product = new Product({
 //     _id: new mongoose.Types.ObjectId(),
 //     name: req.body.name,
 //     price: req.body.price,
@@ -63,7 +63,7 @@ router.get('/', (req, res, next) => {
 // })
 
 router.post('/', (req, res, next) => {
-	const product = new Product({
+	let product = new Product({
 		_id: new mongoose.Types.ObjectId(),
 		name: req.body.name,
 		price: req.body.price,

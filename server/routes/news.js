@@ -1,7 +1,7 @@
-const express = require('express')
-const mongoose = require('mongoose')
-const News = require('../models/news.js')
-const router = express.Router()
+let express = require('express')
+let mongoose = require('mongoose')
+let News = require('../models/news.js')
+let router = express.Router()
 
 var { authenticate } = require('./../middleware/authenticate.js')
 

@@ -1,8 +1,8 @@
-const mongoose = require('mongoose')
-const bodyParser = require('body-parser')
-const Message = require('../models/message.js')
-const express = require('express')
-const router = express.Router()
+let mongoose = require('mongoose')
+let bodyParser = require('body-parser')
+let Message = require('../models/message.js')
+let express = require('express')
+let router = express.Router()
 
 var { authenticate } = require('./../middleware/authenticate.js')
 
