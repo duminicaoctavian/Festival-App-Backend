@@ -1,35 +1,9 @@
 const express = require('express')
 const mongoose = require('mongoose')
-const multer = require('multer')
 const Product = require('../models/product')
 const router = express.Router()
 
 var {authenticate} = require('./../middleware/authenticate.js')
-
-const storage = multer.diskStorage({
-  destination: (req, file, callback) => {
-    callback(null, './uploads/')
-  },
-  filename: (req, file, callback) => {
-    callback(null, new Date().toISOString() + file.originalname);
-  }
-})
-
-const fileFilter = (req, file, callback) => {
-  if (file.mimetype === 'image/jpeg' || file.mimetype === 'image/png') {
-    callback(null, true)
-  } else {
-    callback(null, false)
-  }
-}
-
-const upload = multer({
-  storage: storage,
-  limits: {
-    fileSize: 1024 * 1024 * 5
-  },
-  fileFilter: fileFilter
-})
 
 router.get('/', (req, res, next) => {
   Product.find()
