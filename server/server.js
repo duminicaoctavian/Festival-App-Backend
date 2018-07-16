@@ -36,96 +36,96 @@ app.use('/locations', locationRoutes)
 var typingUsers = {};
 
 app.get('/', (req, res) => {
-  res.json({ message: 'API is alive!' })
+	res.json({ message: 'API is alive!' })
 });
 
 io.on('connection', (socket) => {
-  console.log('A user connected')
-  //Listens for a new chat message
-  socket.on('newChannel', function(name, description) {
-    //Create channel
-    let newChannel = new Channel ({
-      name: name,
-      description: description,
-    })
-    //Save it to database
-    newChannel.save(function(err, channel){
-      //Send message to those connected in the room
-      console.log('new channel created')
-      io.emit("channelCreated", channel.name, channel.description, channel.id)
-    })
-  })
+	console.log('A user connected')
+	//Listens for a new chat message
+	socket.on('newChannel', function (name, description) {
+		//Create channel
+		let newChannel = new Channel({
+			name: name,
+			description: description,
+		})
+		//Save it to database
+		newChannel.save(function (err, channel) {
+			//Send message to those connected in the room
+			console.log('new channel created')
+			io.emit("channelCreated", channel.name, channel.description, channel.id)
+		})
+	})
 
-  //Listens for user typing.
-  socket.on("startType", function(userName, channelId){
-    console.log("User " + userName + " is writing a message...")
-    typingUsers[userName] = channelId
-    io.emit("userTypingUpdate", typingUsers, channelId)
-  })
+	//Listens for user typing.
+	socket.on("startType", function (userName, channelId) {
+		console.log("User " + userName + " is writing a message...")
+		typingUsers[userName] = channelId
+		io.emit("userTypingUpdate", typingUsers, channelId)
+	})
 
-  socket.on("stopType", function(userName){
-    console.log("User " + userName + " has stopped writing a message...")
-    delete typingUsers[userName]
-    io.emit("userTypingUpdate", typingUsers)
-  })
+	socket.on("stopType", function (userName) {
+		console.log("User " + userName + " has stopped writing a message...")
+		delete typingUsers[userName]
+		io.emit("userTypingUpdate", typingUsers)
+	})
 
-  //Listens for a new chat message
-  socket.on('newMessage', function(messageBody, userId, channelId, userName) {
-    //Create message
+	//Listens for a new chat message
+	socket.on('newMessage', function (messageBody, userId, channelId, userName) {
+		//Create message
 
-    console.log(messageBody)
+		console.log(messageBody)
 
-    let newMessage = new Message({
-      messageBody: messageBody,
-      userId: userId,
-      channelId: channelId,
-      userName: userName,
-    })
-    //Save it to database
-    newMessage.save(function(err, msg){
-      //Send message to those connected in the room
-      console.log('new message sent')
+		let newMessage = new Message({
+			messageBody: messageBody,
+			userId: userId,
+			channelId: channelId,
+			userName: userName,
+		})
+		//Save it to database
+		newMessage.save(function (err, msg) {
+			//Send message to those connected in the room
+			console.log('new message sent')
 
-      io.emit("messageCreated",  msg.messageBody, msg.userId, msg.channelId, msg.userName, msg.id, msg.timeStamp);
-    })
-  })
+			io.emit("messageCreated", msg.messageBody, msg.userId, msg.channelId, msg.userName, msg.id, msg.timeStamp);
+		})
+	})
 
-  socket.on('newLocation', function(latitude, longitude, userId, title, address, description, images) {
-    console.log(images)
-    console.log(latitude)
-    console.log(longitude)
-    console.log(userId)
-    console.log(title)
-    console.log(address)
-    console.log(description)
+	socket.on('newLocation', function (latitude, longitude, userId, title, address, description, images) {
+		console.log(images)
+		console.log(latitude)
+		console.log(longitude)
+		console.log(userId)
+		console.log(title)
+		console.log(address)
+		console.log(description)
 
-    let newLocation = new Location({
-      latitude: latitude,
-      longitude: longitude,
-      userId: userId,
-      title: title,
-      address: address,
-      description: description,
-      images: images
-    })
+		let newLocation = new Location({
+			latitude: latitude,
+			longitude: longitude,
+			userId: userId,
+			title: title,
+			address: address,
+			description: description,
+			images: images
+		})
 
-    newLocation.save(function(err, loc) {
+		newLocation.save(function (err, loc) {
 
-      console.log(loc)
+			console.log(loc)
 
-      console.log('new location sent')
+			console.log('new location sent')
 
-      io.emit("locationCreated",loc._id, loc.latitude, loc.longitude, loc.userId, loc.title, loc.address, loc.description, loc.images)
-    })
+			io.emit("locationCreated", loc._id, loc.latitude, loc.longitude, loc.userId, loc.title, loc.address, loc.description, loc.images)
+		})
 
-  })
+	})
 })
 
 server.listen(port, () => {
-  console.log(`Server started on port ${port}`)
+	console.log(`Server started on port ${port}`)
 })
 
 module.exports = {
-  app,
-  io
+	app,
+	io
 }
