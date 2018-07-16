@@ -3,7 +3,16 @@ let validator = require('validator')
 let jwt = require('jsonwebtoken')
 let _ = require('lodash')
 let bcrypt = require('bcryptjs')
-let { modelName, userSerializationKey, documentMethod } = require('./../utils/constants')
+let { ModelName, UserSerializationKey, DocumentMethod, AccessType } = require('./../utils/constants')
+
+// TODO - Access for other user types
+// TODO - Solve remaining magic strings
+
+let ErrorMessage = {
+	username: '{VALUE} is not a valid username. Only alphanumeric characters are allowed.',
+	email: '{VALUE} is not a valid email.',
+	URL: '{VALUE} is not a valid URL.'
+}
 
 var UserSchema = new mongoose.Schema({
 	username: {
@@ -14,7 +23,7 @@ var UserSchema = new mongoose.Schema({
 		unique: true,
 		validate: {
 			validator: validator.isAlphanumeric,
-			message: '{VALUE} is not a valid username'
+			message: ErrorMessage.username
 		}
 	},
 	email: {
@@ -25,7 +34,7 @@ var UserSchema = new mongoose.Schema({
 		unique: true,
 		validate: {
 			validator: validator.isEmail,
-			message: '{VALUE} is not a valid email'
+			message: ErrorMessage.email
 		}
 	},
 	password: {
@@ -39,7 +48,7 @@ var UserSchema = new mongoose.Schema({
 		trim: true,
 		validate: {
 			validator: validator.isURL,
-			message: '{VALUE} is not a valid URL'
+			message: ErrorMessage.URL
 		}
 	},
 	tokens: [{
@@ -59,22 +68,22 @@ UserSchema.methods.toJSON = function () {
 	var userObject = user.toObject()
 
 	return _.pick(userObject, [
-		userSerializationKey.id,
-		userSerializationKey.username,
-		userSerializationKey.email,
-		userSerializationKey.imageUrl
+		UserSerializationKey.id,
+		UserSerializationKey.username,
+		UserSerializationKey.email,
+		UserSerializationKey.imageUrl
 	])
 }
 
 UserSchema.methods.generateAuthToken = function () {
 	var user = this
-	var access = 'auth'
+	var access = AccessType.client
 	var token = jwt.sign({ _id: user._id.toHexString(), access }, process.env.JWT_SECRET).toString()
 
 	user.tokens = user.tokens.concat([{
-		access: access,
-		token: token
-	}]);
+		access,
+		token
+	}])
 
 	return user.save().then(() => {
 		return token
@@ -87,14 +96,14 @@ UserSchema.statics.findByToken = function (token) {
 
 	try {
 		decoded = jwt.verify(token, process.env.JWT_SECRET)
-	} catch (e) {
+	} catch (error) {
 		return Promise.reject()
 	}
 
 	return User.findOne({
 		_id: decoded._id,
-		'tokens.token': token,
-		'tokens.access': 'auth'
+		'tokens.access': AccessType.client,
+		'tokens.token': token
 	})
 }
 
@@ -107,8 +116,8 @@ UserSchema.statics.findByCredentials = function (email, password) {
 		}
 
 		return new Promise((resolve, reject) => {
-			bcrypt.compare(password, user.password, (err, res) => {
-				if (res) {
+			bcrypt.compare(password, user.password, (error, response) => {
+				if (response) {
 					resolve(user)
 				} else {
 					reject(user)
@@ -130,12 +139,12 @@ UserSchema.methods.removeToken = function (token) {
 	})
 }
 
-UserSchema.pre(documentMethod.save, function (next) {
+UserSchema.pre(DocumentMethod.save, function (next) {
 	var user = this
 
-	if (user.isModified(userSerializationKey.password)) {
-		bcrypt.genSalt(10, (err, salt) => {
-			bcrypt.hash(user.password, salt, (err, hash) => {
+	if (user.isModified(UserSerializationKey.password)) {
+		bcrypt.genSalt(10, (error, salt) => {
+			bcrypt.hash(user.password, salt, (error, hash) => {
 				user.password = hash
 				next()
 			})
@@ -145,7 +154,7 @@ UserSchema.pre(documentMethod.save, function (next) {
 	}
 })
 
-var User = mongoose.model(modelName.user, UserSchema)
+var User = mongoose.model(ModelName.user, UserSchema)
 
 module.exports = {
 	User

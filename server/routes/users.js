@@ -19,7 +19,7 @@ router.post('/', async (req, res) => {
 		let user = new User(body)
 		await user.save()
 		let token = await user.generateAuthToken()
-		res.header('X-Auth', token).send(user)
+		res.header('Role-Client', token).send(user)
 	} catch (e) {
 		res.status(400).send(e)
 	}

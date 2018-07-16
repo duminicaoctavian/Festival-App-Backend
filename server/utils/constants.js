@@ -1,4 +1,32 @@
-let modelName = {
+// Serialization Keys
+let UserSerializationKey = {
+    id: '_id',
+    username: 'username',
+    password: 'password',
+    email: 'email',
+    imageUrl: 'imageUrl'
+}
+
+// Headers
+let Header = {
+    admin: 'Access-Admin',
+    client: 'Access-Client',
+    artist: 'Access-Artist',
+    employee: 'Access-Employee',
+    organizer: 'Access-Organizer'
+}
+
+// Access Type
+let AccessType = {
+    admin: 'admin',
+    client: 'client',
+    artist: 'artist',
+    employee: 'employee',
+    organizer: 'organizer'
+}
+
+// Model Names
+let ModelName = {
     artist: 'Artist',
     channel: 'Channel',
     location: 'Location',
@@ -8,15 +36,8 @@ let modelName = {
     user: 'User'
 }
 
-let userSerializationKey = {
-    id: '_id',
-    username: 'username',
-    password: 'password',
-    email: 'email',
-    imageUrl: 'imageUrl'
-}
-
-let documentMethod = {
+// Document Methods
+let DocumentMethod = {
     init: 'init',
     validate: 'validate',
     save: 'save',
@@ -24,7 +45,9 @@ let documentMethod = {
 }
 
 module.exports = {
-    modelName,
-    documentMethod,
-    userSerializationKey
+    UserSerializationKey,
+    Header,
+    AccessType,
+    ModelName,
+    DocumentMethod, 
 }
