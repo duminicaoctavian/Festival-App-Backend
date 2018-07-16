@@ -14,7 +14,7 @@ let ErrorMessage = {
 	URL: '{VALUE} is not a valid URL.'
 }
 
-var UserSchema = new mongoose.Schema({
+let UserSchema = new mongoose.Schema({
 	username: {
 		type: String,
 		required: true,
@@ -39,10 +39,10 @@ var UserSchema = new mongoose.Schema({
 	},
 	password: {
 		type: String,
-		require: true,
+		required: true,
 		minlength: 6
 	},
-	imageUrl: {
+	imageURL: {
 		type: String,
 		required: false,
 		trim: true,
@@ -64,8 +64,8 @@ var UserSchema = new mongoose.Schema({
 })
 
 UserSchema.methods.toJSON = function () {
-	var user = this
-	var userObject = user.toObject()
+	let user = this
+	let userObject = user.toObject()
 
 	return _.pick(userObject, [
 		UserSerializationKey.id,
@@ -76,9 +76,9 @@ UserSchema.methods.toJSON = function () {
 }
 
 UserSchema.methods.generateAuthToken = function () {
-	var user = this
-	var access = AccessType.client
-	var token = jwt.sign({ _id: user._id.toHexString(), access }, process.env.JWT_SECRET).toString()
+	let user = this
+	let access = AccessType.client
+	let token = jwt.sign({ _id: user._id.toHexString(), access }, process.env.JWT_SECRET).toString()
 
 	user.tokens = user.tokens.concat([{
 		access,
@@ -91,7 +91,7 @@ UserSchema.methods.generateAuthToken = function () {
 }
 
 UserSchema.statics.findByToken = function (token) {
-	var User = this
+	let User = this
 	var decoded
 
 	try {
@@ -108,7 +108,7 @@ UserSchema.statics.findByToken = function (token) {
 }
 
 UserSchema.statics.findByCredentials = function (email, password) {
-	var User = this
+	let User = this
 
 	return User.findOne({ email }).then((user) => {
 		if (!user) {
@@ -128,7 +128,7 @@ UserSchema.statics.findByCredentials = function (email, password) {
 }
 
 UserSchema.methods.removeToken = function (token) {
-	var user = this
+	let user = this
 
 	return user.update({
 		$pull: {
@@ -140,7 +140,7 @@ UserSchema.methods.removeToken = function (token) {
 }
 
 UserSchema.pre(DocumentMethod.save, function (next) {
-	var user = this
+	let user = this
 
 	if (user.isModified(UserSerializationKey.password)) {
 		bcrypt.genSalt(10, (error, salt) => {
@@ -154,7 +154,7 @@ UserSchema.pre(DocumentMethod.save, function (next) {
 	}
 })
 
-var User = mongoose.model(ModelName.user, UserSchema)
+let User = mongoose.model(ModelName.user, UserSchema)
 
 module.exports = {
 	User

@@ -8,6 +8,8 @@ let { authenticateAsClient } = require('./../middleware/authenticate')
 let { ObjectID } = require('mongodb')
 let { StoragePath, Header, UserSerializationKey } = require('./../utils/constants')
 
+// TODO - operations for the other users
+
 let Route = {
 	default: '/',
 	me: '/me',
@@ -22,6 +24,7 @@ let router = express.Router()
 router.post(Route.default, async (request, response) => {
 	try {
 		let body = {
+			_id: new mongoose.Types.ObjectId(),
 			username: request.body.username,
 			email: request.body.email,
 			password: request.body.password,

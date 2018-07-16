@@ -1,78 +1,77 @@
 let express = require('express')
 let mongoose = require('mongoose')
 let moment = require('moment')
-let Artist = require('../models/artist.js')
+let { authenticateAsClient } = require('./../middleware/authenticate')
+let { Artist } = require('../models/artist')
+let { DateConstants } = require('./../utils/constants')
+
 let router = express.Router()
 
-var { authenticate } = require('./../middleware/authenticate.js')
+let Route = {
+	default: '/',
+	byStage: '/:stage',
+	byStageAndDay: '/:stage/:day'
+}
 
-router.post('/', (req, res) => {
-	var dateString
-	let momentTime = moment(req.body.time, 'hh:mm')
-	let adjustedMomentTime = moment([1970, 0, 1]).hour(momentTime.hour()).minute(momentTime.minute())
+// TODO - operation only done by admin
+router.post(Route.default, (request, response) => {
+	let dateTime = request.body.date.substring(12, 17)
+	let momentDate = moment(request.body.date, DateConstants.dateFormatter)
 
-	if ((req.body.time.localeCompare('00:00') >= 0) && (req.body.time.localeCompare('12:00') <= 0)) {
-		adjustedMomentTime.add(1, 'day')
-		dateString = adjustedMomentTime.format('DD-MM-YYYY HH:mm')
-	} else {
-		dateString = adjustedMomentTime.format('DD-MM-YYYY HH:mm')
+	if (dateTime.localeCompare(DateConstants.endOfDayTime) <= 0) {
+		momentDate.add(1, DateConstants.dayUnitOfTime)
 	}
 
-	var artist = new Artist({
+	let artist = new Artist({
 		_id: new mongoose.Types.ObjectId(),
-		name: req.body.name,
-		genre: req.body.genre,
-		description: req.body.description,
-		stage: req.body.stage,
-		day: req.body.day,
-		time: dateString,
-		artistImage: req.body.artistImage
+		name: request.body.name,
+		genre: request.body.genre,
+		description: request.body.description,
+		stage: request.body.stage,
+		day: request.body.day,
+		date: momentDate.toDate(),
+		artistImageURL: request.body.artistImageURL
 	})
 
-	artist.save().then((doc) => {
-		res.send(doc)
-	}, (err) => {
-		res.status(400).send(err)
+	artist.save().then((artist) => {
+		response.send(artist)
+	}, (error) => {
+		response.status(400).send(error)
 	})
 })
 
-router.get('/', (req, res) => {
+router.get(Route.default, authenticateAsClient, (request, response) => {
 	Artist.find({}).sort('name').then((artists) => {
-		res.send({ artists })
-	}, (e) => {
-		res.status(400).send(e)
+		response.send({ artists })
+	}, (error) => {
+		response.status(400).send(error)
 	})
 })
 
-router.get('/:stage', (req, res) => {
-	var stage = req.params.stage
+router.get(Route.byStage, authenticateAsClient, (request, response) => {
+	let stage = request.params.stage
 
-	Artist.find({
-		stage: stage,
-	}).sort('name').then((artists) => {
+	Artist.find({ stage }).sort('name').then((artists) => {
 		if (artists.length === 0) {
-			return res.status(404).send()
+			return response.status(404).send()
 		}
-		res.send({ artists })
-	}).catch((e) => {
-		res.status(400).send()
+		response.send({ artists })
+	}).catch((error) => {
+		response.status(400).send()
 	})
 })
 
-router.get('/:stage/:day', (req, res) => {
-	var stage = req.params.stage
-	var day = req.params.day
+router.get(Route.byStageAndDay, authenticateAsClient, (request, response) => {
+	let stage = request.params.stage
+	let day = request.params.day
 
-	Artist.find({
-		stage: stage,
-		day: day,
-	}).sort('time').then((artists) => {
+	Artist.find({ stage, day }).sort('date').then((artists) => {
 		if (artists.length === 0) {
-			return res.status(404).send()
+			return response.status(404).send()
 		}
-		res.send({ artists })
-	}).catch((e) => {
-		res.status(400).send()
+		response.send({ artists })
+	}).catch((error) => {
+		response.status(400).send()
 	})
 })
 

@@ -1,49 +1,78 @@
 let mongoose = require('mongoose')
+let validator = require('validator')
+let { ModelName } = require('./../utils/constants')
 
-let artistSchema = mongoose.Schema({
-	_id: mongoose.Schema.Types.ObjectId,
+let ErrorMessage = {
+	name: '{VALUE} is not a valid artist name.',
+	genre: '{VALUE} is not a valid genre.',
+	stage: '{VALUE} is not a valid stage name.',
+	day: '{VALUE} is not a valid day number.',
+	URL: '{VALUE} is not a valid URL.'
+}
+
+let ArtistSchema = mongoose.Schema({
 	name: {
 		type: String,
 		required: true,
 		minlength: 1,
-		trim: true
+		trim: true,
+		unique: true,
+		validate: {
+			validator: validator.isAlphanumeric,
+			message: ErrorMessage.name
+		}
 	},
 	genre: {
 		type: String,
 		required: true,
 		minlength: 1,
-		trim: true
+		trim: true,
+		validate: {
+			validator: validator.isAlpha,
+			message: ErrorMessage.genre
+		}
 	},
 	description: {
 		type: String,
 		required: true,
-		minlength: 1,
+		minlength: 50,
 		trim: true
 	},
 	stage: {
 		type: String,
 		required: true,
-		minlength: 1,
-		trim: true
+		minlength: 4,
+		trim: true,
+		validate: {
+			validator: validator.isAlpha,
+			message: ErrorMessage.stage
+		}
 	},
 	day: {
-		type: String,
+		type: Number,
 		required: true,
-		minlength: 1,
+		trim: true,
+		min: 1,
+		max: 4
+	},
+	date: {
+		type: Date,
+		required: true,
 		trim: true
 	},
-	time: {
+	artistImageURL: {
 		type: String,
 		required: true,
-		minlength: 1,
-		trim: true
-	},
-	artistImage: {
-		type: String,
-		required: true,
-		minlength: 1,
-		trim: true
+		trim: true,
+		validate: {
+			validator: validator.isURL,
+			message: ErrorMessage.URL
+		}
 	}
 })
 
-module.exports = mongoose.model('Artist', artistSchema)
+let Artist = mongoose.model(ModelName.artist, ArtistSchema)
+
+module.exports = {
+	Artist
+}
