@@ -71,7 +71,7 @@ UserSchema.methods.toJSON = function () {
 		UserSerializationKey.id,
 		UserSerializationKey.username,
 		UserSerializationKey.email,
-		UserSerializationKey.imageUrl
+		UserSerializationKey.imageURL
 	])
 }
 

@@ -4,7 +4,7 @@ let UserSerializationKey = {
     username: 'username',
     password: 'password',
     email: 'email',
-    imageUrl: 'imageUrl'
+    imageURL: 'imageURL'
 }
 
 // Headers
