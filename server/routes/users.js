@@ -28,7 +28,7 @@ router.post(Route.default, async (request, response) => {
 			username: request.body.username,
 			email: request.body.email,
 			password: request.body.password,
-			imageUrl: StoragePath.defaultProfilePictureURL
+			imageURL: StoragePath.defaultProfilePictureURL
 		}
 
 		let user = new User(body)
