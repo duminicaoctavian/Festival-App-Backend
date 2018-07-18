@@ -73,7 +73,7 @@ io.on('connection', (socket) => {
 	socket.on('newMessage', function (body, userID, channelID, username) {
 		//Create message
 
-		console.log(messageBody)
+		console.log(body)
 
 		let newMessage = new Message({
 			body: body,
