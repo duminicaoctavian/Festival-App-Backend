@@ -46,7 +46,7 @@ let DocumentMethod = {
 
 // Storage Paths
 let StoragePath = {
-    defaultProfilePictureURL: 'https://firebasestorage.googleapis.com/v0/b/granis-fbe83.appspot.com/o/ProfileImages%2Fprofile-default.jpg?alt=media&token=9d9d275b-710b-4637-ae95-5944a5fb2948'
+    defaultProfilePictureURL: 'https://s3.eu-central-1.amazonaws.com/octaviansuniversalbucket/profileDefault.png'
 }
 
 // Date Constants
