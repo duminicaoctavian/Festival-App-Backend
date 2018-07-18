@@ -1,29 +1,41 @@
 let mongoose = require('mongoose')
+let validator = require('validator')
+let { ModelName } = require('./../utils/constants')
 
-let newsSchema = mongoose.Schema({
-	_id: mongoose.Schema.Types.ObjectId,
+let ErrorMessage = {
+	URL: '{VALUE} is not a valid URL.'
+}
+
+let NewsSchema = mongoose.Schema({
 	title: {
 		type: String,
 		required: true,
-		minlength: 1,
+		minlength: 10,
 		trim: true
 	},
 	description: {
 		type: String,
 		required: true,
-		minlength: 1,
+		minlength: 10,
 		trim: true
 	},
-	timeStamp: {
+	date: {
 		type: Date,
 		default: Date.now
 	},
-	url: {
+	URL: {
 		type: String,
 		required: true,
-		minlength: 1,
-		trim: true
+		trim: true,
+		validate: {
+			validator: validator.isURL,
+			message: ErrorMessage.URL
+		}
 	}
 })
 
-module.exports = mongoose.model('News', newsSchema)
+let News = mongoose.model(ModelName.news, NewsSchema)
+
+module.exports = {
+	News
+}

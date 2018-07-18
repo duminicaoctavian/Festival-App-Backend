@@ -14,7 +14,7 @@ let ErrorMessage = {
 	URL: '{VALUE} is not a valid URL.'
 }
 
-let UserSchema = new mongoose.Schema({
+let UserSchema = mongoose.Schema({
 	username: {
 		type: String,
 		required: true,

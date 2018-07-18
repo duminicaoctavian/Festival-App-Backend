@@ -3,7 +3,7 @@ let _ = require('lodash')
 let bcrypt = require('bcryptjs')
 
 let { mongoose } = require('./../db/mongoose')
-let { User } = require('../models/user.js')
+let { User } = require('../models/user')
 let { authenticateAsClient } = require('./../middleware/authenticate')
 let { ObjectID } = require('mongodb')
 let { StoragePath, Header, UserSerializationKey } = require('./../utils/constants')

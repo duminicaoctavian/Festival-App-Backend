@@ -1,30 +1,35 @@
 let express = require('express')
 let mongoose = require('mongoose')
-let News = require('../models/news.js')
+let { News } = require('../models/news')
+let { authenticateAsClient } = require('./../middleware/authenticate')
+
 let router = express.Router()
 
-var { authenticate } = require('./../middleware/authenticate.js')
+let Route = {
+	default: '/'
+}
 
-router.post('/', (req, res) => {
+// TODO - only done by admin
+router.post(Route.default, (request, response) => {
 	var news = new News({
 		_id: new mongoose.Types.ObjectId(),
-		title: req.body.title,
-		description: req.body.description,
-		url: req.body.url
+		title: request.body.title,
+		description: request.body.description,
+		URL: request.body.URL
 	})
 
-	news.save().then((doc) => {
-		res.send(doc)
-	}, (err) => {
-		res.status(400).send(err)
+	news.save().then((news) => {
+		response.send(news)
+	}, (error) => {
+		response.status(400).send(error)
 	})
 })
 
-router.get('/', (req, res) => {
-	News.find({}).sort([['timeStamp', 'descending']]).then((news) => {
-		res.send({ news })
-	}, (e) => {
-		res.status(400).send(e)
+router.get(Route.default, authenticateAsClient, (request, response) => {
+	News.find({}).sort([['date', 'descending']]).then((news) => {
+		response.send({ news })
+	}, (error) => {
+		response.status(400).send(error)
 	})
 })
 

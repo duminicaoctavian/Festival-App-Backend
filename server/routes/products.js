@@ -1,83 +1,75 @@
 let express = require('express')
 let mongoose = require('mongoose')
-let Product = require('../models/product')
+let { Product } = require('../models/product')
+let { authenticateAsClient } = require('./../middleware/authenticate')
+
 let router = express.Router()
 
-var { authenticate } = require('./../middleware/authenticate.js')
+let Route = {
+	default: '/',
+	byCategory: '/:category'
+}
 
-router.get('/', (req, res, next) => {
-	Product.find()
-		.select('name price _id productImage')
-		.exec()
-		.then(docs => {
-			let response = {
-				count: docs.length,
-				products: docs.map(doc => {
-					return {
-						name: doc.name,
-						price: doc.price,
-						productImage: doc.productImage,
-						category: doc.category,
-						_id: doc._id
-					}
-				})
-			}
-			res.status(200).json(response);
-		})
-		.catch(err => {
-			console.log(err)
-			res.status(500).json({
-				error: err
-			})
-		})
-})
-
-router.post('/', (req, res, next) => {
-	let product = new Product({
-		_id: new mongoose.Types.ObjectId(),
-		name: req.body.name,
-		price: req.body.price,
-		productImage: req.body.productImage,
-		category: req.body.category
-	})
-	product
-		.save()
-		.then(result => {
-			console.log(result)
-			res.status(201).json({
-				message: 'Created product successfully',
-				createdProduct: {
-					name: result.name,
-					price: result.price,
-					category: result.category,
-					_id: result._id
+router.get(Route.default, authenticateAsClient, (request, response, next) => {
+	Product.find({}).then(products => {
+		let res = {
+			count: products.length,
+			products: products.map(product => {
+				return {
+					_id: product._id,
+					name: product.name,
+					price: product.price,
+					imageURL: product.imageURL,
+					category: product.category
 				}
 			})
+		}
+		response.status(200).json(res);
+	}).catch(error => {
+		response.status(500).json({
+			error
 		})
-		.catch(err => {
-			console.log(err)
-			res.status(500).json({
-				error: err
-			})
-		})
+	})
 })
 
-router.get('/:category', (req, res) => {
-	var category = req.params.category
+// TODO - operation only done by admin
+router.post(Route.default, (request, response, next) => {
+	let product = new Product({
+		_id: new mongoose.Types.ObjectId(),
+		name: request.body.name,
+		price: request.body.price,
+		imageURL: request.body.imageURL,
+		category: request.body.category
+	})
 
-	Product.find({
-		category: category,
-	}).sort('name')
-		.select('name price _id productImage')
-		.exec()
-		.then((products) => {
-			if (products.length === 0) {
-				return res.status(404).send()
+	product.save().then(product => {
+		response.status(201).json({
+			createdProduct: {
+				_id: product._id,
+				name: product.name,
+				price: product.price,
+				category: product.category,
+				imageURL: product.imageURL
 			}
-			res.send({ products })
-		}).catch((e) => {
-			res.status(400).send()
 		})
+	}).catch(error => {
+		res.status(500).json({
+			error
+		})
+	})
+})
+
+router.get(Route.byCategory, authenticateAsClient, (request, response) => {
+	let category = request.params.category
+
+	Product.find({ category }).sort('name').then((products) => {
+		if (products.length === 0) {
+			return response.status(404).send()
+		}
+		response.send({ products })
+	}).catch((error) => {
+		response.status(400).send()
+	})
 })
 
 module.exports = router
