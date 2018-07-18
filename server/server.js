@@ -57,36 +57,36 @@ io.on('connection', (socket) => {
 	})
 
 	//Listens for user typing.
-	socket.on("startType", function (userName, channelId) {
-		console.log("User " + userName + " is writing a message...")
-		typingUsers[userName] = channelId
-		io.emit("userTypingUpdate", typingUsers, channelId)
+	socket.on("startType", function (username, channelID) {
+		console.log("User " + username + " is writing a message...")
+		typingUsers[username] = channelID
+		io.emit("userTypingUpdate", typingUsers, channelID)
 	})
 
-	socket.on("stopType", function (userName) {
-		console.log("User " + userName + " has stopped writing a message...")
-		delete typingUsers[userName]
+	socket.on("stopType", function (username) {
+		console.log("User " + username + " has stopped writing a message...")
+		delete typingUsers[username]
 		io.emit("userTypingUpdate", typingUsers)
 	})
 
 	//Listens for a new chat message
-	socket.on('newMessage', function (messageBody, userId, channelId, userName) {
+	socket.on('newMessage', function (body, userID, channelID, username) {
 		//Create message
 
 		console.log(messageBody)
 
 		let newMessage = new Message({
-			messageBody: messageBody,
-			userId: userId,
-			channelId: channelId,
-			userName: userName,
+			body: body,
+			userID: userID,
+			channelID: channelID,
+			username: username,
 		})
 		//Save it to database
 		newMessage.save(function (err, msg) {
 			//Send message to those connected in the room
 			console.log('new message sent')
 
-			io.emit("messageCreated", msg.messageBody, msg.userId, msg.channelId, msg.userName, msg.id, msg.timeStamp);
+			io.emit("messageCreated", msg.body, msg.userID, msg.channelID, msg.username, msg.id, msg.date)
 		})
 	})
 
