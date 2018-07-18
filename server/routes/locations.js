@@ -1,35 +1,39 @@
 let express = require('express')
 let mongoose = require('mongoose')
-let Location = require('../models/location.js')
+var { authenticateAsClient } = require('./../middleware/authenticate')
+let { Location } = require('../models/location')
+
 let router = express.Router()
 
-var { authenticate } = require('./../middleware/authenticate.js')
+let Route = {
+	default: '/'
+}
 
-router.post('/', (req, res) => {
+router.post(Route.default, authenticateAsClient, (request, response) => {
 
-	var location = new Location({
+	let location = new Location({
 		_id: new mongoose.Types.ObjectId(),
-		latitude: req.body.latitude,
-		longitude: req.body.longitude,
-		userId: req.body.userId,
-		title: req.body.title,
-		address: req.body.address,
-		description: req.body.description,
-		images: req.body.images
+		latitude: request.body.latitude,
+		longitude: request.body.longitude,
+		userID: request.body.userID,
+		title: request.body.title,
+		address: request.body.address,
+		description: request.body.description,
+		images: request.body.images
 	})
 
-	location.save().then((doc) => {
-		res.send(doc)
-	}, (err) => {
-		res.status(400).send(err)
+	location.save().then((location) => {
+		response.send(location)
+	}, (error) => {
+		response.status(400).send(error)
 	})
 })
 
-router.get('/', (req, res) => {
+router.get(Route.default, authenticateAsClient, (request, response) => {
 	Location.find({}).then((locations) => {
-		res.send({ locations })
-	}, (e) => {
-		res.status(400).send(e)
+		response.send({ locations })
+	}, (error) => {
+		response.status(400).send(error)
 	})
 })
 

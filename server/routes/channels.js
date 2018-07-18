@@ -1,50 +1,54 @@
 let mongoose = require('mongoose')
-let bodyParser = require('body-parser')
-let Channel = require('../models/channel.js')
 let express = require('express')
+let { Channel } = require('../models/channel')
+let  { authenticateAsClient } = require('./../middleware/authenticate')
+
 let router = express.Router()
 
-var { authenticate } = require('./../middleware/authenticate.js')
+let Route = {
+	default: '/',
+	byID: '/:id'
+}
+// TODO - only done by organizer
+router.post(Route.default, (request, response) => {
+	let channel = Channel({
+		name: request.body.name,
+		description: request.body.description
+	})
 
-router.post('/', (req, res) => {
-	let newChannel = new Channel();
-	newChannel.name = req.body.name;
-	newChannel.description = req.body.description;
-
-	newChannel.save(err => {
-		if (err) {
-			res.status(500).json({ message: err })
+	channel.save(error => {
+		if (error) {
+			response.status(500).json({ message: error })
 		}
-		res.status(200).json({ message: 'Channel saved successfully' })
+		response.status(200).send()
 	})
 })
 
-router.get('/', (req, res) => {
-	Channel.find({}, (err, channels) => {
-		if (err) {
-			res.status(500).json({ message: err })
+router.get(Route.default, authenticateAsClient, (request, response) => {
+	Channel.find({}, (error, channels) => {
+		if (error) {
+			response.status(500).json({ message: error })
 		}
-		res.status(200).json(channels);
+		response.status(200).json(channels)
 	})
 })
 
-router.get('/:id', (req, res) => {
-	Channel.findById(req.params.id, (err, channel) => {
-		if (err) {
-			res.status(500).json({ message: err })
+router.get(Route.byID, authenticateAsClient, (request, response) => {
+	Channel.findById(request.params.id, (error, channel) => {
+		if (error) {
+			response.status(500).json({ message: error })
 		}
-		res.status(200).json(channel);
+		response.status(200).json(channel);
 	})
 })
 
-router.delete('/:id', (req, res) => {
-	Channel.remove({
-		_id: req.params.id
-	}, (err, channel) => {
-		if (err) {
-			res.status(500).json({ message: err })
+// TODO - only done by organizer
+router.delete(Route.byID, (request, response) => {
+	Channel.remove({ _id: request.params.id }, (error, channel) => {
+		if (error) {
+			response.status(500).json({ message: error })
 		}
-		res.status(200).json({ message: 'Channel Successfully Removed' })
+		response.status(200).send()
 	})
 })
 

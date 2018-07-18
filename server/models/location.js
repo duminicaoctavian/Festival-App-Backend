@@ -1,45 +1,61 @@
 let mongoose = require('mongoose')
-let User = require('./user.js')
-
+let validator = require('validator')
+let { ModelName } = require('./../utils/constants')
 
 let ObjectId = mongoose.Schema.Types.ObjectId
 
-var locationSchema = new mongoose.Schema({
+let Reference = {
+	user: 'User'
+}
+
+let ErrorMessage = {
+	URL: '{VALUE} is not a valid URL.'
+}
+
+var LocationSchema = mongoose.Schema({
 	latitude: {
+		type: Number,
+		required: true
+	},
+	longitude: {
+		type: Number,
+		required: true
+	},
+	userID: {
+		type: ObjectId,
+		ref: Reference.user
+	},
+	title: {
 		type: String,
 		required: true,
 		minlength: 1,
 		trim: true
 	},
-	longitude: {
-		type: String,
-		required: true,
-		trim: true,
-		minlength: 1
-	},
-	userId: {
-		type: ObjectId,
-		ref: 'User'
-	},
-	title: {
-		type: String,
-		required: true
-	},
 	address: {
 		type: String,
 		required: true,
-		trim: true,
-		minlength: 1
+		minlength: 1,
+		trim: true
 	},
 	description: {
 		type: String,
 		required: true,
-		trim: true,
-		minlength: 1
+		minlength: 1,
+		trim: true
 	},
 	images: [{
-		type: String
+		type: String,
+		required: false,
+		trim: true,
+		validate: {
+			validator: validator.isURL,
+			message: ErrorMessage.URL
+		}
 	}]
 })
 
-module.exports = mongoose.model('Location', locationSchema)
+let Location = mongoose.model(ModelName.location, LocationSchema)
+
+module.exports = {
+	Location
+}
