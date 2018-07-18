@@ -3,10 +3,7 @@ let validator = require('validator')
 let { ModelName } = require('./../utils/constants')
 
 let ErrorMessage = {
-	name: '{VALUE} is not a valid artist name.',
-	genre: '{VALUE} is not a valid genre.',
 	stage: '{VALUE} is not a valid stage name.',
-	day: '{VALUE} is not a valid day number.',
 	URL: '{VALUE} is not a valid URL.'
 }
 
@@ -16,21 +13,13 @@ let ArtistSchema = mongoose.Schema({
 		required: true,
 		minlength: 1,
 		trim: true,
-		unique: true,
-		validate: {
-			validator: validator.isAlphanumeric,
-			message: ErrorMessage.name
-		}
+		unique: true
 	},
 	genre: {
 		type: String,
 		required: true,
 		minlength: 1,
-		trim: true,
-		validate: {
-			validator: validator.isAlpha,
-			message: ErrorMessage.genre
-		}
+		trim: true
 	},
 	description: {
 		type: String,
