@@ -1,43 +1,46 @@
 let mongoose = require('mongoose')
-let bodyParser = require('body-parser')
-let Message = require('../models/message.js')
 let express = require('express')
+let { Message } = require('../models/message')
+let { authenticateAsClient } = require('./../middleware/authenticate.js')
+
 let router = express.Router()
 
-var { authenticate } = require('./../middleware/authenticate.js')
+let Route = {
+	default: '/',
+	byChannelID: '/:channelID',
+	byID: '/:id'
+}
 
-router.post('/', (req, res) => {
-	let newMessage = new Message()
-	newMessage.messageBody = req.body.messageBody
-	newMessage.userId = req.body.userId
-	newMessage.channelId = req.body.channelId
-	newMessage.userName = req.body.userName
+router.post(Route.default, authenticateAsClient, (request, response) => {
+	let message = new Message({
+		body: request.body.body,
+		userID: request.body.userID,
+		channelID: request.body.channelID,
+		username: request.body.username
+	})
 
-	newMessage.save(err => {
-		if (err) {
-			res.status(500).json({ message: err })
+	message.save(error => {
+		if (error) {
+			response.status(500).json({ message: error })
 		}
-		res.status(200).json({ message: 'Message saved successfully' })
+		response.status(200).send()
 	})
 })
 
-router.get('/:channelId', (req, res) => {
-	Message
-		.find({ 'channelId': req.params.channelId }).sort('timeStamp').then((messages) => {
-			res.send(messages)
-		}, (e) => {
-			res.status(400).send(e)
-		})
+router.get(Route.byChannelID, authenticateAsClient, (request, response) => {
+	Message.find({ 'channelID': request.params.channelID }).sort('date').then((messages) => {
+		response.send(messages)
+	}, (error) => {
+		response.status(400).send(error)		
+	})
 })
 
-router.delete('/:id', (req, res) => {
-	Message.remove({
-		_id: req.params.id
-	}, (err, message) => {
-		if (err) {
-			res.status(500).json({ message: err })
+router.delete(Route.byID, authenticateAsClient, (request, response) => {
+	Message.remove({ _id: request.params.id }, (error, result) => {
+		if (error) {
+			response.status(500).json({ message: error })
 		}
-		res.status(200).json({ message: 'Message Successfully Removed' })
+		response.status(200).send()
 	})
 })
 

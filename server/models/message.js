@@ -1,31 +1,52 @@
 let mongoose = require('mongoose')
-let User = require('./user.js')
-let Channel = require('./channel.js')
+let validator = require('validator')
+let { ModelName } = require('./../utils/constants')
 
-let Schema = mongoose.Schema;
-let ObjectId = mongoose.Schema.Types.ObjectId;
+let Reference = {
+	user: 'User',
+	channel: 'Channel'
+}
 
-let messageSchema = new Schema({
-	messageBody: {
+let ErrorMessage = {
+	username: '{VALUE} is not a valid username. Only alphanumeric characters are allowed.'
+}
+
+let ObjectID = mongoose.Schema.Types.ObjectId
+
+let MessageSchema = mongoose.Schema({
+	body: {
 		type: String,
-		default: ""
+		required: true,
+		trim: true,
+		minlength: 1,
+		maxlength: 255
 	},
-	timeStamp: {
+	date: {
 		type: Date,
 		default: Date.now
 	},
-	userId: {
-		type: ObjectId,
-		ref: 'User'
-	},
-	channelId: {
-		type: ObjectId,
-		ref: 'Channel'
-	},
-	userName: {
+	username: {
 		type: String,
-		default: ""
+		required: true,
+		trim: true,
+		minlength: 6,
+		validate: {
+			validator: validator.isAlphanumeric,
+			message: ErrorMessage.username
+		}
+	},
+	userID: {
+		type: ObjectID,
+		ref: Reference.user
+	},
+	channelID: {
+		type: ObjectID,
+		ref: Reference.channel
 	}
 })
 
-module.exports = mongoose.model('Message', messageSchema);
+let Message = mongoose.model(ModelName.message, MessageSchema)
+
+module.exports = {
+	Message
+}
