@@ -19,6 +19,10 @@ let Route = {
 	byEmail: '/:email'
 }
 
+let Feedback = {
+	logoutSuccess: 'Successfully logged out user'
+}
+
 let router = express.Router()
 
 router.post(Route.default, async (request, response) => {
@@ -64,7 +68,7 @@ router.post(Route.login, async (request, response) => {
 router.delete(Route.logout, authenticateAsClient, async (request, response) => {
 	try {
 		await request.user.removeToken(request.token)
-		response.status(200).send()
+		response.status(200).json({ message: Feedback.logoutSuccess })
 	} catch (error) {
 		response.status(400).send()
 	}
