@@ -7,6 +7,31 @@ let UserSerializationKey = {
     imageURL: 'imageURL'
 }
 
+// API Routes
+let APIRoute = {
+	products: '/products',
+	artists: '/artists',
+	users: '/users',
+    channels: '/channels',
+    messages: '/messages',
+    news: '/news',
+    locations: '/locations'
+}
+
+// Socket Events 
+let SocketEvent = {
+    connection: 'connection',
+    newChannel: 'newChannel',
+    channelCreated: 'channelCreated',
+    startType: 'startType',
+    userTypingUpdate: 'userTypingUpdate',
+    stopType: 'stopType',
+    newMessage: 'newMessage',
+    messageCreated: 'messageCreated',
+    newLocation: 'newLocation',
+    locationCreated: 'locationCreated'
+}
+
 // Headers
 let Header = {
     admin: 'Access-Admin',
@@ -63,5 +88,7 @@ module.exports = {
     ModelName,
     DocumentMethod,
     StoragePath,
-    DateConstants
+    DateConstants,
+    APIRoute,
+    SocketEvent
 }
