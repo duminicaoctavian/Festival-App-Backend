@@ -11,6 +11,10 @@ let Route = {
 	byID: '/:id'
 }
 
+let Feedback = {
+	messageCreateSuccess: 'Message created successfully!'
+}
+
 router.post(Route.default, authenticateAsClient, (request, response) => {
 	let message = new Message({
 		body: request.body.body,
@@ -23,7 +27,7 @@ router.post(Route.default, authenticateAsClient, (request, response) => {
 		if (error) {
 			response.status(500).json({ message: error })
 		}
-		response.status(200).send()
+		response.status(200).json({ message: Feedback.messageCreateSuccess })
 	})
 })
 
