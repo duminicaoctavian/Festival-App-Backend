@@ -16,8 +16,8 @@ let messagesRoutes = require('./routes/messages')
 let locationRoutes = require('./routes/locations')
 let newsRoutes = require('./routes/news')
 
-let Message = require('./models/message')
-let Location = require('./models/location')
+let { Message } = require('./models/message')
+let { Location } = require('./models/location')
 
 let port = process.env.PORT
 
