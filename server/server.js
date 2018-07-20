@@ -41,6 +41,7 @@ app.use(APIRoute.locations, locationRoutes)
 var typingUsers = {}
 
 io.on(SocketEvent.connection, (socket) => {
+	console.log('A new user has connected!')
 	socket.on(SocketEvent.newChannel, function (name, description) {
 		let channel = new Channel({
 			name,
