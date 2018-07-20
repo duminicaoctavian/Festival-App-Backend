@@ -101,12 +101,12 @@ router.patch(Route.byID, (request, response) => {
 
 	let username = request.body.username
 	let password = request.body.password
-	let imageUrl = request.body.imageUrl
+	let imageURL = request.body.imageURL
 
 	if (password === undefined || password === "") {
 		let body = {
 			username,
-			imageUrl
+			imageURL
 		}
 
 		User.findOneAndUpdate({ _id: id }, { $set: body }, { new: true }).then((user) => {
@@ -128,7 +128,7 @@ router.patch(Route.byID, (request, response) => {
 				let body = {
 					username,
 					password,
-					imageUrl
+					imageURL
 				}
 
 				User.findOneAndUpdate({ _id: id }, { $set: body }, { new: true }).then((user) => {
