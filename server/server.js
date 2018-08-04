@@ -48,13 +48,13 @@ io.on(SocketEvent.connection, (socket) => {
 			description,
 		})
 		channel.save(function (error, channel) {
-			io.emit(SocketEvent.channelCreated, channel.name, channel.description, channel.id)
+			io.emit(SocketEvent.channelCreated, channel.id, channel.name, channel.description)
 		})
 	})
 
 	socket.on(SocketEvent.startType, function (username, channelID) {
 		typingUsers[username] = channelID
-		io.emit(SocketEvent.userTypingUpdate, typingUsers, channelID)
+		io.emit(SocketEvent.userTypingUpdate, channelID, typingUsers)
 	})
 
 	socket.on(SocketEvent.stopType, function (username) {
@@ -70,8 +70,8 @@ io.on(SocketEvent.connection, (socket) => {
 			username,
 		})
 		message.save(function (error, message) {
-			io.emit(SocketEvent.messageCreated, message.body, message.userID, message.channelID, 
-				message.username, message.id, message.date)
+			io.emit(SocketEvent.messageCreated, message.id,  message.userID, message.channelID, message.body,
+				message.username, message.date)
 		})
 	})
 
@@ -88,8 +88,8 @@ io.on(SocketEvent.connection, (socket) => {
 		})
 
 		location.save(function (error, location) {
-			io.emit(SocketEvent.locationCreated, location._id, location.latitude, location.longitude, 
-				location.userID, location.title, location.address, location.description, location.images)
+			io.emit(SocketEvent.locationCreated, location._id, location.userID, location.latitude, location.longitude, 
+				location.title, location.address, location.description, location.images)
 		})
 
 	})
