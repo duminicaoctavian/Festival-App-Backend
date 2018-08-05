@@ -15,7 +15,8 @@ router.post(Route.default, (request, response) => {
 		_id: new mongoose.Types.ObjectId(),
 		title: request.body.title,
 		description: request.body.description,
-		URL: request.body.URL
+		videoURL: request.body.videoURL,
+		imageURL: request.body.imageURL
 	})
 
 	news.save().then((news) => {

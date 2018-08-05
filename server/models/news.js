@@ -23,9 +23,18 @@ let NewsSchema = mongoose.Schema({
 		type: Date,
 		default: Date.now
 	},
-	URL: {
+	videoURL: {
 		type: String,
-		required: true,
+		required: false,
+		trim: true,
+		validate: {
+			validator: validator.isURL,
+			message: ErrorMessage.URL
+		}
+	},
+	imageURL: {
+		type: String,
+		required: false,
 		trim: true,
 		validate: {
 			validator: validator.isURL,
