@@ -18,15 +18,15 @@ let ProductSchema = mongoose.Schema({
 		type: Number,
 		required: true
 	},
-	imageURL: {
+	images: [{
 		type: String,
-		required: true,
+		required: false,
 		trim: true,
 		validate: {
 			validator: validator.isURL,
 			message: ErrorMessage.URL
 		}
-	},
+	}],
 	category: {
 		type: String,
 		required: true,

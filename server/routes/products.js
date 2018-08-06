@@ -19,7 +19,7 @@ router.get(Route.default, authenticateAsClient, (request, response, next) => {
 					_id: product._id,
 					name: product.name,
 					price: product.price,
-					imageURL: product.imageURL,
+					images: product.images,
 					category: product.category
 				}
 			})
@@ -38,7 +38,7 @@ router.post(Route.default, (request, response, next) => {
 		_id: new mongoose.Types.ObjectId(),
 		name: request.body.name,
 		price: request.body.price,
-		imageURL: request.body.imageURL,
+		images: request.body.images,
 		category: request.body.category
 	})
 
@@ -49,7 +49,7 @@ router.post(Route.default, (request, response, next) => {
 				name: product.name,
 				price: product.price,
 				category: product.category,
-				imageURL: product.imageURL
+				images: product.images
 			}
 		})
 	}).catch(error => {
