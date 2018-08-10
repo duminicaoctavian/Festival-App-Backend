@@ -15,6 +15,7 @@ let channelsRoutes = require('./routes/channels')
 let messagesRoutes = require('./routes/messages')
 let locationRoutes = require('./routes/locations')
 let newsRoutes = require('./routes/news')
+let questionRoutes = require('./routes/questions')
 
 let { Message } = require('./models/message')
 let { Location } = require('./models/location')
@@ -37,6 +38,7 @@ app.use(APIRoute.channels, channelsRoutes)
 app.use(APIRoute.messages, messagesRoutes)
 app.use(APIRoute.news, newsRoutes)
 app.use(APIRoute.locations, locationRoutes)
+app.use(APIRoute.questions, questionRoutes)
 
 var typingUsers = {}
 

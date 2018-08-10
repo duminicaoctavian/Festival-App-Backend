@@ -15,7 +15,8 @@ let APIRoute = {
     channels: '/channels',
     messages: '/messages',
     news: '/news',
-    locations: '/locations'
+    locations: '/locations',
+    questions: '/questions'
 }
 
 // Socket Events 
@@ -58,7 +59,8 @@ let ModelName = {
     message: 'Message',
     news: 'News',
     product: 'Product',
-    user: 'User'
+    user: 'User',
+    question: 'Question'
 }
 
 // Document Methods
