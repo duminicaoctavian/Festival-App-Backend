@@ -32,7 +32,7 @@ router.get(Route.randomQuestion, authenticateAsClient, (request, response) => {
         }
         let randomIndex = Math.floor((Math.random() * questions.length))
         let question = questions[randomIndex]
-        response.send({ question })
+        response.send(question)
     }, (error) => {
         response.status(400).send(error)
     })
