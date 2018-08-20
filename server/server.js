@@ -72,7 +72,7 @@ io.on(SocketEvent.connection, (socket) => {
 			username,
 		})
 		message.save(function (error, message) {
-			io.emit(SocketEvent.messageCreated, message.id,  message.userID, message.channelID, message.body,
+			io.emit(SocketEvent.messageCreated, message.userID, message.channelID, message.body,
 				message.username, message.date)
 		})
 	})
