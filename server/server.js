@@ -65,14 +65,15 @@ io.on(SocketEvent.connection, (socket) => {
 	})
 
 	socket.on(SocketEvent.newMessage, function (body, userID, channelID, username) {
+		console.log(body, userID, channelID, username)
 		let message = new Message({
 			body,
 			userID,
 			channelID,
 			username,
 		})
-		message.save(function (error, message) {
-			io.emit(SocketEvent.messageCreated, message.userID, message.channelID, message.body,
+		message.save(function (error, message){
+			io.emit(SocketEvent.messageCreated, message.id, message.userID, message.channelID, message.body,
 				message.username, message.date)
 		})
 	})
