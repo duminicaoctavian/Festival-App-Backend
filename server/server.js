@@ -91,10 +91,36 @@ io.on(SocketEvent.connection, (socket) => {
 		})
 
 		location.save(function (error, location) {
-			io.emit(SocketEvent.locationCreated, location._id, location.userID, location.latitude, location.longitude, 
-				location.title, location.address, location.description, location.images)
+			io.emit(SocketEvent.locationCreated, location._id, location.userID, location.latitude, 
+				location.longitude, location.title, location.address, 
+				location.description, location.images)
 		})
+	})
 
+	socket.on(SocketEvent.deleteLocation, function (id) {
+		Location.findOneAndRemove({ _id: id}, (error, location) => {
+			io.emit(SocketEvent.locationDeleted, location._id, location.userID, 
+				location.latitude, location.longitude, location.title, location.address, 
+				location.description, location.images)
+		})
+	})
+
+	socket.on(SocketEvent.updateLocation, function (id, latitude, longitude, userID, title, address, description, images) {
+		let body = {
+			id,
+			latitude,
+			longitude,
+			userID,
+			title,
+			address,
+			description,
+			images
+		}
+
+		Location.findOneAndUpdate({ _id: id }, { $set: body }, { new: true }, (error, location, response) => {
+			io.emit(SocketEvent.locationUpdated, location._id, location.userID, location.latitude, location.longitude,
+			location.title, location.address, location.description, location.images)
+		})
 	})
 })
 

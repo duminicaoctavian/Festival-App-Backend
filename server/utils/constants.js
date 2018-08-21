@@ -30,7 +30,11 @@ let SocketEvent = {
     newMessage: 'newMessage',
     messageCreated: 'messageCreated',
     newLocation: 'newLocation',
-    locationCreated: 'locationCreated'
+    locationCreated: 'locationCreated',
+    deleteLocation: 'deleteLocation',
+    locationDeleted: 'locationDeleted',
+    updateLocation: 'updateLocation',
+    locationUpdated: 'locationUpdated'
 }
 
 // Headers
