@@ -44,6 +44,7 @@ var typingUsers = {}
 
 io.on(SocketEvent.connection, (socket) => {
 	console.log('A new user has connected!')
+
 	socket.on(SocketEvent.newChannel, function (name, description) {
 		let channel = new Channel({
 			name,
@@ -65,20 +66,21 @@ io.on(SocketEvent.connection, (socket) => {
 	})
 
 	socket.on(SocketEvent.newMessage, function (body, userID, channelID, username) {
-		console.log(body, userID, channelID, username)
 		let message = new Message({
 			body,
 			userID,
 			channelID,
 			username,
 		})
+		
 		message.save(function (error, message){
 			io.emit(SocketEvent.messageCreated, message.id, message.userID, message.channelID, message.body,
 				message.username, message.date)
 		})
 	})
 
-	socket.on(SocketEvent.newLocation, function (latitude, longitude, userID, title, address, description, images) {
+	socket.on(SocketEvent.newLocation, function (latitude, longitude, userID, title, address, 
+		description, price, images) {
 
 		let location = new Location({
 			latitude,
@@ -87,13 +89,14 @@ io.on(SocketEvent.connection, (socket) => {
 			title,
 			address,
 			description,
+			price,
 			images
 		})
 
 		location.save(function (error, location) {
 			io.emit(SocketEvent.locationCreated, location._id, location.userID, location.latitude, 
 				location.longitude, location.title, location.address, 
-				location.description, location.images)
+				location.description, location.price, location.images)
 		})
 	})
 
@@ -105,7 +108,8 @@ io.on(SocketEvent.connection, (socket) => {
 		})
 	})
 
-	socket.on(SocketEvent.updateLocation, function (id, latitude, longitude, userID, title, address, description, images) {
+	socket.on(SocketEvent.updateLocation, function (id, latitude, longitude, userID, title, address, 
+		description, price, images) {
 		let body = {
 			id,
 			latitude,
@@ -114,12 +118,13 @@ io.on(SocketEvent.connection, (socket) => {
 			title,
 			address,
 			description,
+			price,
 			images
 		}
 
 		Location.findOneAndUpdate({ _id: id }, { $set: body }, { new: true }, (error, location, response) => {
 			io.emit(SocketEvent.locationUpdated, location._id, location.userID, location.latitude, location.longitude,
-			location.title, location.address, location.description, location.images)
+			location.title, location.address, location.description, location.price, location.images)
 		})
 	})
 })
