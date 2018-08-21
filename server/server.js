@@ -23,7 +23,8 @@ let { Location } = require('./models/location')
 let port = process.env.PORT
 
 let Log = {
-	serverStart: `Server started on port ${port}`
+	serverStart: `Server started on port ${port}`,
+	userConnection: 'A new user has connected',
 }
 
 var app = express()
@@ -43,7 +44,7 @@ app.use(APIRoute.questions, questionRoutes)
 var typingUsers = {}
 
 io.on(SocketEvent.connection, (socket) => {
-	console.log('A new user has connected!')
+	console.log(Log.userConnection)
 
 	socket.on(SocketEvent.newChannel, function (name, description) {
 		let channel = new Channel({
@@ -72,7 +73,7 @@ io.on(SocketEvent.connection, (socket) => {
 			channelID,
 			username,
 		})
-		
+
 		message.save(function (error, message){
 			io.emit(SocketEvent.messageCreated, message.id, message.userID, message.channelID, message.body,
 				message.username, message.date)

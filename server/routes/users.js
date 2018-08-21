@@ -75,11 +75,12 @@ router.delete(Route.logout, authenticateAsClient, async (request, response) => {
 })
 
 router.get(Route.byID, (request, response) => {
-	User.findOne({ '_id': request.params.id }).exec((error, userData) => {
+	User.findOne({ '_id': request.params.id }).exec((error, user) => {
+		console.log(user)
 		if (error) {
 			response.status(500).json({ message: error })
 		}
-		response.status(200).json(userData)
+		response.status(200).json(user)
 	})
 })
 
