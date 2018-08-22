@@ -81,8 +81,8 @@ io.on(SocketEvent.connection, (socket) => {
 	})
 
 	socket.on(SocketEvent.newLocation, function (latitude, longitude, userID, title, address, 
-		description, price, images) {
-
+		description, price, phone, images) {
+		
 		let location = new Location({
 			latitude,
 			longitude,
@@ -91,13 +91,16 @@ io.on(SocketEvent.connection, (socket) => {
 			address,
 			description,
 			price,
+			phone,
 			images
 		})
+
+		console.log(location)
 
 		location.save(function (error, location) {
 			io.emit(SocketEvent.locationCreated, location._id, location.userID, location.latitude, 
 				location.longitude, location.title, location.address, 
-				location.description, location.price, location.images)
+				location.description, location.price, location.phone, location.images)
 		})
 	})
 
@@ -105,12 +108,12 @@ io.on(SocketEvent.connection, (socket) => {
 		Location.findOneAndRemove({ _id: id}, (error, location) => {
 			io.emit(SocketEvent.locationDeleted, location._id, location.userID, 
 				location.latitude, location.longitude, location.title, location.address, 
-				location.description, location.images)
+				location.description, location.price, location.phone, location.images)
 		})
 	})
 
 	socket.on(SocketEvent.updateLocation, function (id, latitude, longitude, userID, title, address, 
-		description, price, images) {
+		description, price, phone, images) {
 		let body = {
 			id,
 			latitude,
@@ -120,12 +123,13 @@ io.on(SocketEvent.connection, (socket) => {
 			address,
 			description,
 			price,
+			phone,
 			images
 		}
 
 		Location.findOneAndUpdate({ _id: id }, { $set: body }, { new: true }, (error, location, response) => {
 			io.emit(SocketEvent.locationUpdated, location._id, location.userID, location.latitude, location.longitude,
-			location.title, location.address, location.description, location.price, location.images)
+			location.title, location.address, location.description, location.price, location.phone, location.images)
 		})
 	})
 })

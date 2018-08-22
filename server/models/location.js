@@ -9,7 +9,8 @@ let Reference = {
 }
 
 let ErrorMessage = {
-	URL: '{VALUE} is not a valid URL.'
+	URL: '{VALUE} is not a valid URL.',
+	phone: '{VALUE} is not a valid phone number.'
 }
 
 var LocationSchema = mongoose.Schema({
@@ -46,6 +47,16 @@ var LocationSchema = mongoose.Schema({
 	price: {
 		type: Number,
 		required: true,
+	},
+	phone: {
+		type: String,
+		required: true,
+		minlength: 1,
+		trim: true,
+		validate: {
+			validator: validator.isMobilePhone,
+			message: ErrorMessage.phone
+		}
 	},
 	images: [{
 		type: String,

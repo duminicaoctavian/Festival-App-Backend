@@ -19,6 +19,8 @@ router.post(Route.default, authenticateAsClient, (request, response) => {
 		title: request.body.title,
 		address: request.body.address,
 		description: request.body.description,
+		price: request.body.price,
+		phone: request.body.phone,
 		images: request.body.images
 	})
 
