@@ -31,9 +31,7 @@ let Log = {
 
 let NotificationConstants = {
 	newLocationMessage: "A user has posted an offer near you",
-	newLocationPayload = {
-		id: "newLocation:" + makeid
-	}
+	newLocationID: makeid
 }
 
 var app = express()
@@ -109,7 +107,9 @@ io.on(SocketEvent.connection, (socket) => {
 		location.save(function (error, location) {
 			
 			let message = NotificationConstants.newLocationMessage
-			let payload = NotificationConstants.newLocationPayload
+			let payload = {
+				id: NotificationConstants.newLocationID
+			}
 
 			sendNotification(message, payload)
 
