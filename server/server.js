@@ -8,6 +8,7 @@ let socketIO = require('socket.io')
 let http = require('http')
 let { APIRoute, SocketEvent } = require('./utils/constants')
 var { sendNotification } = require('./utils/apns')
+var { makeid } = require('./utils/helpers')
 
 let productRoutes = require('./routes/products')
 let artistRoutes = require('./routes/artists')
@@ -29,8 +30,10 @@ let Log = {
 }
 
 let NotificationConstants = {
-	newLocationTitle: "New Location",
-	newLocationMessage: "A user has posted a location near you" 
+	newLocationMessage: "A user has posted an offer near you",
+	newLocationPayload = {
+		id: "newLocation:" + makeid
+	}
 }
 
 var app = express()
@@ -105,12 +108,10 @@ io.on(SocketEvent.connection, (socket) => {
 
 		location.save(function (error, location) {
 			
-			let title = NotificationConstants.newLocationTitle
-			let payload = {
-				message: NotificationConstants.newLocationMessage
-			}
+			let message = NotificationConstants.newLocationMessage
+			let payload = NotificationConstants.newLocationPayload
 
-			sendNotification(title, payload)
+			sendNotification(message, payload)
 
 			io.emit(SocketEvent.locationCreated, location._id, location.userID, location.latitude, 
 				location.longitude, location.title, location.address, 
