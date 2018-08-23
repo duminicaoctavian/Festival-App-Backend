@@ -31,7 +31,7 @@ let Log = {
 
 let NotificationConstants = {
 	newLocationMessage: "A user has posted an offer near you",
-	newLocationID: makeid
+	newLocationID: "newLocation"
 }
 
 var app = express()
