@@ -1,17 +1,31 @@
 let express = require('express')
 let mongoose = require('mongoose')
 let moment = require('moment')
+let apn = require('apn')
 let { authenticateAsClient } = require('./../middleware/authenticate')
 let { Artist } = require('../models/artist')
 let { DateConstants } = require('./../utils/constants')
 
 let router = express.Router()
 
+var options = {
+	token: {
+		key: "apns.p8",
+		keyId: "52338BR324",
+		teamId: "PX5AU8YC45"
+	},
+	production: false
+}
+
+var apnProvider = new apn.Provider(options)
+
 let Route = {
 	default: '/',
 	byStage: '/:stage',
 	byStageAndDay: '/:stage/:day'
 }
+
+let deviceToken = "3ACE6E867FAA671A3FDE66B4140B5F2390BCAE986FB08CF1E9E0562DFC4FA966"
 
 // TODO - operation only done by admin
 router.post(Route.default, (request, response) => {
@@ -31,6 +45,19 @@ router.post(Route.default, (request, response) => {
 		day: request.body.day,
 		date: momentDate.toDate(),
 		artistImageURL: request.body.artistImageURL
+	})
+
+	var notification = new apn.Notification()
+
+	notification.expiry = Math.floor(Date.now() / 1000) + 3600
+	notification.badge = 1
+	notification.sound = "ping.aiff"
+	notification.alert = "New message"
+	notification.payload = {'messageFrom': 'John Appleseed'}
+	notification.topic = "Octavian.Festival-App"
+
+	apnProvider.send(notification, deviceToken).then((result) => {
+		console.log(result)
 	})
 
 	artist.save().then((artist) => {
