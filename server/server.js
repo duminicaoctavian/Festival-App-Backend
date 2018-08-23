@@ -7,6 +7,7 @@ let bodyParser = require('body-parser')
 let socketIO = require('socket.io')
 let http = require('http')
 let { APIRoute, SocketEvent } = require('./utils/constants')
+var { sendNotification } = require('./utils/apns')
 
 let productRoutes = require('./routes/products')
 let artistRoutes = require('./routes/artists')
@@ -25,6 +26,11 @@ let port = process.env.PORT
 let Log = {
 	serverStart: `Server started on port ${port}`,
 	userConnection: 'A new user has connected',
+}
+
+let NotificationConstants = {
+	newLocationTitle: "New Location",
+	newLocationMessage: "A user has posted a location near you" 
 }
 
 var app = express()
@@ -98,6 +104,14 @@ io.on(SocketEvent.connection, (socket) => {
 		console.log(location)
 
 		location.save(function (error, location) {
+			
+			let title = NotificationConstants.newLocationTitle
+			let payload = {
+				message: NotificationConstants.newLocationMessage
+			}
+
+			sendNotification(title, payload)
+
 			io.emit(SocketEvent.locationCreated, location._id, location.userID, location.latitude, 
 				location.longitude, location.title, location.address, 
 				location.description, location.price, location.phone, location.images)
