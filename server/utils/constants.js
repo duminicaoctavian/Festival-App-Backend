@@ -4,7 +4,8 @@ let UserSerializationKey = {
     username: 'username',
     password: 'password',
     email: 'email',
-    imageURL: 'imageURL'
+    imageURL: 'imageURL',
+    artists: 'artists'
 }
 
 // API Routes

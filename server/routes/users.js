@@ -16,7 +16,8 @@ let Route = {
 	login: '/login',
 	logout: '/me/token',
 	byID: '/:id',
-	byEmail: '/:email'
+	byEmail: '/:email',
+	addArtistID: '/addArtist/:id'
 }
 
 let Feedback = {
@@ -32,7 +33,8 @@ router.post(Route.default, async (request, response) => {
 			username: request.body.username,
 			email: request.body.email,
 			password: request.body.password,
-			imageURL: StoragePath.defaultProfilePictureURL
+			imageURL: StoragePath.defaultProfilePictureURL,
+			artists: Array()
 		}
 
 		let user = new User(body)
@@ -144,6 +146,34 @@ router.patch(Route.byID, (request, response) => {
 			})
 		})
 	}
+})
+
+router.patch(Route.addArtistID, authenticateAsClient, (request, response) => {
+	let userID = request.params.id
+	let artistID = request.body.artistID
+
+	let artists = Array()
+
+	User.findOne({ _id: userID }).then((user) => {
+		artists = user.artists
+		artists.push(artistID)
+
+		let body = {
+			artists
+		}
+
+		User.findOneAndUpdate({ _id: userID }, { $set: body }, { new: true }).then((user) => {
+			if (!user) {
+				return response.status(404).send()
+			}
+	
+			response.send(user)
+		}).catch((error) => {
+			response.status(400).send()
+		})
+	}).catch((error) => {
+		response.status(400).send()
+	})
 })
 
 module.exports = router

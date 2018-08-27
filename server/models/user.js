@@ -14,6 +14,12 @@ let ErrorMessage = {
 	URL: '{VALUE} is not a valid URL.'
 }
 
+let Reference = {
+	artist: 'Artist'
+}
+
+let ObjectID = mongoose.Schema.Types.ObjectId
+
 let UserSchema = mongoose.Schema({
 	username: {
 		type: String,
@@ -51,6 +57,10 @@ let UserSchema = mongoose.Schema({
 			message: ErrorMessage.URL
 		}
 	},
+	artists: [{
+		type: ObjectID,
+		ref: Reference.artist
+	}],
 	tokens: [{
 		access: {
 			type: String,
@@ -71,7 +81,8 @@ UserSchema.methods.toJSON = function () {
 		UserSerializationKey.id,
 		UserSerializationKey.username,
 		UserSerializationKey.email,
-		UserSerializationKey.imageURL
+		UserSerializationKey.imageURL,
+		UserSerializationKey.artists
 	])
 }
 
