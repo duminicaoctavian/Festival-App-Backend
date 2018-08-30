@@ -22,6 +22,7 @@ let questionRoutes = require('./routes/questions')
 let { User } = require('./models/user')
 let { Message } = require('./models/message')
 let { Location } = require('./models/location')
+let { Channel } = required('./models/channel')
 
 let port = process.env.PORT
 
@@ -32,7 +33,9 @@ let Log = {
 
 let NotificationConstants = {
 	newLocationMessage: "A user has posted an offer near you",
-	newLocationID: "newLocation"
+	newMessageMessage: `${username} in ${channel}: ${message}`,
+	newLocationID: "newLocation",
+	newMessageID: "newMessage"
 }
 
 var app = express()
@@ -82,7 +85,23 @@ io.on(SocketEvent.connection, (socket) => {
 			username,
 		})
 
-		message.save(function (error, message){
+		message.save(function (error, message) {
+			Channel.findOne({ _id: channelID }).then((channel) => {
+				let channelName = channel.name
+			
+				let notificationMessage = `${username} in #${channelName}: ${body}`
+				let payload = {
+					id: NotificationConstants.newMessageID
+				}
+	
+				User.find({}).then((users) => {
+					users.forEach((user) => {
+						let deviceToken = user.deviceToken
+						sendNotification(notificationMessage, payload, deviceToken)
+					})
+				})
+			})
+			
 			io.emit(SocketEvent.messageCreated, message.id, message.userID, message.channelID, message.body,
 				message.username, message.date)
 		})
