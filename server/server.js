@@ -95,8 +95,10 @@ io.on(SocketEvent.connection, (socket) => {
 	
 				User.find({}).then((users) => {
 					users.forEach((user) => {
-						let deviceToken = user.deviceToken
-						sendNotification(notificationMessage, payload, deviceToken)
+						if (user._id != userID) {
+							let deviceToken = user.deviceToken
+							sendNotification(notificationMessage, payload, deviceToken)
+						}
 					})
 				})
 			})
@@ -132,8 +134,10 @@ io.on(SocketEvent.connection, (socket) => {
 
 			User.find({}).then((users) => {
 				users.forEach((user) => {
-					let deviceToken = user.deviceToken
+					if (user._id != userID) {
+						let deviceToken = user.deviceToken
 					sendNotification(message, payload, deviceToken)
+					}
 				})
 			})
 
