@@ -22,7 +22,7 @@ let questionRoutes = require('./routes/questions')
 let { User } = require('./models/user')
 let { Message } = require('./models/message')
 let { Location } = require('./models/location')
-let { Channel } = required('./models/channel')
+let { Channel } = require('./models/channel')
 
 let port = process.env.PORT
 
