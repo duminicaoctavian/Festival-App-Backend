@@ -116,12 +116,12 @@ io.on(SocketEvent.connection, (socket) => {
 				users.forEach((user) => {
 					let deviceToken = user.deviceToken
 					sendNotification(message, payload, deviceToken)
-				}).then(() => {
-					io.emit(SocketEvent.locationCreated, location._id, location.userID, location.latitude, 
-						location.longitude, location.title, location.address, 
-						location.description, location.price, location.phone, location.images)
 				})
 			})
+
+			io.emit(SocketEvent.locationCreated, location._id, location.userID, location.latitude, 
+				location.longitude, location.title, location.address, 
+				location.description, location.price, location.phone, location.images)
 		})
 	})
 

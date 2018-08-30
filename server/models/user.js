@@ -155,6 +155,22 @@ UserSchema.statics.findByCredentials = function (email, password) {
 	})
 }
 
+UserSchema.statics.removeDeviceToken = function (id) {
+	let User = this
+	let body = {
+		deviceToken: ""
+	}
+	return User.findOneAndUpdate({ _id: id }, { $set: body }, { new: true }).then((user) => {
+		if (!user) {
+			return Promise.reject()
+		}
+
+		return Promise.resolve()
+	}).catch((error) => {
+		return Promise.reject()
+	})
+}
+
 UserSchema.methods.removeToken = function (token) {
 	let user = this
 
