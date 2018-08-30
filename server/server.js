@@ -19,6 +19,7 @@ let locationRoutes = require('./routes/locations')
 let newsRoutes = require('./routes/news')
 let questionRoutes = require('./routes/questions')
 
+let { User } = require('./models/user')
 let { Message } = require('./models/message')
 let { Location } = require('./models/location')
 
@@ -111,11 +112,14 @@ io.on(SocketEvent.connection, (socket) => {
 				id: NotificationConstants.newLocationID
 			}
 
-			sendNotification(message, payload)
+			User.findOne({ _id: userID }).then((user) => {
+				let deviceToken = user.deviceToken
+				sendNotification(message, payload, deviceToken)
 
-			io.emit(SocketEvent.locationCreated, location._id, location.userID, location.latitude, 
-				location.longitude, location.title, location.address, 
-				location.description, location.price, location.phone, location.images)
+				io.emit(SocketEvent.locationCreated, location._id, location.userID, location.latitude, 
+					location.longitude, location.title, location.address, 
+					location.description, location.price, location.phone, location.images)
+			})
 		})
 	})
 

@@ -34,7 +34,8 @@ router.post(Route.default, async (request, response) => {
 			email: request.body.email,
 			password: request.body.password,
 			imageURL: StoragePath.defaultProfilePictureURL,
-			artists: Array()
+			artists: Array(),
+			deviceToken: request.body.deviceToken
 		}
 
 		let user = new User(body)
@@ -56,7 +57,8 @@ router.post(Route.login, async (request, response) => {
 		let body = _.pick(request.body, [
 			UserSerializationKey.user,
 			UserSerializationKey.email,
-			UserSerializationKey.password
+			UserSerializationKey.password,
+			UserSerializationKey.deviceToken
 		])
 
 		let user = await User.findByCredentials(body.email, body.password)

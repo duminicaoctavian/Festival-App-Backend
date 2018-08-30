@@ -11,9 +11,7 @@ var options = {
 
 var apnProvider = new apn.Provider(options)
 
-let deviceToken = "3ACE6E867FAA671A3FDE66B4140B5F2390BCAE986FB08CF1E9E0562DFC4FA966"
-
-function sendNotification(message, payload) {
+function sendNotification(message, payload, deviceToken) {
     var notification = new apn.Notification()
 
     notification.expiry = Math.floor(Date.now() / 1000) + 3600

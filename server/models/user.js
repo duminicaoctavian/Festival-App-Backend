@@ -59,8 +59,14 @@ let UserSchema = mongoose.Schema({
 	},
 	artists: [{
 		type: ObjectID,
-		ref: Reference.artist
+		ref: Reference.artist,
+		required: false
 	}],
+	deviceToken: {
+		type: String,
+		required: false,
+		trim: true
+	},
 	tokens: [{
 		access: {
 			type: String,
