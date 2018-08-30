@@ -61,8 +61,11 @@ router.post(Route.login, async (request, response) => {
 			UserSerializationKey.deviceToken
 		])
 
+		let deviceToken = request.body.deviceToken
+
 		let user = await User.findByCredentials(body.email, body.password)
 		let token = await user.generateAuthToken()
+		let resultDeviceToken = await user.generateDeviceToken(deviceToken)
 		response.header(Header.client, token).send(user)
 	} catch (error) {
 		response.status(400).send()

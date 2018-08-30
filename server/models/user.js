@@ -107,6 +107,17 @@ UserSchema.methods.generateAuthToken = function () {
 	})
 }
 
+UserSchema.methods.generateDeviceToken = function (deviceToken) {
+	let user = this
+	let token = deviceToken
+
+	user.deviceToken = token
+
+	return user.save().then(() => {
+		return token
+	})
+}
+
 UserSchema.statics.findByToken = function (token) {
 	let User = this
 	var decoded
