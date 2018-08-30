@@ -33,7 +33,6 @@ let Log = {
 
 let NotificationConstants = {
 	newLocationMessage: "A user has posted an offer near you",
-	newMessageMessage: `${username} in ${channel}: ${message}`,
 	newLocationID: "newLocation",
 	newMessageID: "newMessage"
 }
