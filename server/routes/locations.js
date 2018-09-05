@@ -6,7 +6,8 @@ let { Location } = require('../models/location')
 let router = express.Router()
 
 let Route = {
-	default: '/'
+	default: '/',
+	userID: '/:id'
 }
 
 router.post(Route.default, authenticateAsClient, (request, response) => {
@@ -38,5 +39,20 @@ router.get(Route.default, authenticateAsClient, (request, response) => {
 		response.status(400).send(error)
 	})
 })
+
+router.get(Route.userID, authenticateAsClient, (request, response) => {
+	let id = request.params.id
+
+	Location.find({ userID: id }).sort('price').then((locations) => {
+		if (locations.length === 0) {
+			return response.status(404).send()
+		}
+		response.send({ locations })
+	}).catch((error) => {
+		response.status(400).send()
+	})
+})
+
+
 
 module.exports = router
