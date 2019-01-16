@@ -48,6 +48,20 @@ let ApplicationSchema = mongoose.Schema({
     companyID: {
         type: ObjectId,
         ref: Reference.user
+    },
+    userImageURL: {
+        type: String,
+        required: true,
+        trim: true,
+        validate: {
+            validator: validator.isURL,
+            message: ErrorMessage.URL
+        }
+    },
+    offerTitle: {
+        type: String,
+        required: true,
+        trim: true
     }
 })
 

@@ -19,7 +19,9 @@ router.post(Route.default, authenticateAsClient, (request, response) => {
         offerID: request.body.offerID,
         phone: request.body.phone,
         projects: request.body.projects,
-        companyID: request.body.companyID
+        companyID: request.body.companyID,
+        offerTitle: request.body.offerTitle,
+        userImageURL: request.body.userImageURL
     })
 
     application.save().then((application) => {
