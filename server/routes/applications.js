@@ -29,6 +29,20 @@ router.post(Route.default, authenticateAsClient, (request, response) => {
     })
 })
 
+router.get(Route.userID, authenticateAsClient, (request, response) => {
+	let id = request.params.id
+
+	Application.find({ companyID: id }).sort('dateApplied').then((applications) => {
+		if (applications.length === 0) {
+			return response.status(404).send()
+		}
+		response.send({ applications })
+	}).catch((error) => {
+		response.status(400).send(error)
+	})
+})
+
+
 router.get(Route.default, authenticateAsClient, (request, response) => {
 	Application.find({}).then((applications) => {
 		response.send({ applications })
