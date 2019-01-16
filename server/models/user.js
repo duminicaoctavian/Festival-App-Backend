@@ -5,9 +5,6 @@ let _ = require('lodash')
 let bcrypt = require('bcryptjs')
 let { ModelName, UserSerializationKey, DocumentMethod, AccessType, UserType } = require('./../utils/constants')
 
-// TODO - Access for other user types
-// TODO - Solve remaining magic strings
-
 let ErrorMessage = {
 	username: '{VALUE} is not a valid username. Only alphanumeric characters are allowed.',
 	email: '{VALUE} is not a valid email.',
@@ -68,11 +65,6 @@ let UserSchema = mongoose.Schema({
 		required: true,
 		trim: true
 	},
-	// artists: [{
-	// 	type: ObjectID,
-	// 	ref: Reference.artist,
-	// 	required: false
-	// }],
 	deviceToken: {
 		type: String,
 		required: false,

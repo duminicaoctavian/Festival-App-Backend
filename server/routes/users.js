@@ -35,7 +35,6 @@ router.post(Route.default, async (request, response) => {
 			email: request.body.email,
 			password: request.body.password,
 			imageURL: StoragePath.defaultProfilePictureURL,
-			artists: Array(),
 			offersAppliedTo: Array(),
 			type: request.body.type,
 			deviceToken: request.body.deviceToken

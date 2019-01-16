@@ -5,7 +5,6 @@ let UserSerializationKey = {
     password: 'password',
     email: 'email',
     imageURL: 'imageURL',
-    artists: 'artists',
     deviceToken: 'deviceToken',
     offersAppliedTo: 'offersAppliedTo',
     type: 'type'
@@ -13,14 +12,7 @@ let UserSerializationKey = {
 
 // API Routes
 let APIRoute = {
-	products: '/products',
-	artists: '/artists',
 	users: '/users',
-    channels: '/channels',
-    messages: '/messages',
-    news: '/news',
-    locations: '/locations',
-    questions: '/questions',
     offers: '/offers',
     applications: '/applications'
 }
@@ -33,52 +25,19 @@ let UserType = {
     university: 'university'
 }
 
-// Socket Events 
-let SocketEvent = {
-    connection: 'connection',
-    newChannel: 'newChannel',
-    channelCreated: 'channelCreated',
-    startType: 'startType',
-    userTypingUpdate: 'userTypingUpdate',
-    stopType: 'stopType',
-    newMessage: 'newMessage',
-    messageCreated: 'messageCreated',
-    newLocation: 'newLocation',
-    locationCreated: 'locationCreated',
-    deleteLocation: 'deleteLocation',
-    locationDeleted: 'locationDeleted',
-    updateLocation: 'updateLocation',
-    locationUpdated: 'locationUpdated'
-}
-
 // Headers
 let Header = {
-    admin: 'Access-Admin',
-    client: 'Access-Client',
-    artist: 'Access-Artist',
-    employee: 'Access-Employee',
-    organizer: 'Access-Organizer'
+    client: 'Access-Client'
 }
 
 // Access Type
 let AccessType = {
-    admin: 'admin',
-    client: 'client',
-    artist: 'artist',
-    employee: 'employee',
-    organizer: 'organizer'
+    client: 'client'
 }
 
 // Model Names
 let ModelName = {
-    artist: 'Artist',
-    channel: 'Channel',
-    location: 'Location',
-    message: 'Message',
-    news: 'News',
-    product: 'Product',
     user: 'User',
-    question: 'Question',
     offer: 'Offer',
     application: 'Application'
 }
@@ -112,6 +71,5 @@ module.exports = {
     StoragePath,
     DateConstants,
     APIRoute,
-    SocketEvent,
     UserType
 }
