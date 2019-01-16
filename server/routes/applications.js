@@ -10,7 +10,7 @@ let Route = {
     userID: '/:id',
 }
 
-router.post(Route.userID, authenticateAsClient, (request, response) => {
+router.post(Route.default, authenticateAsClient, (request, response) => {
 
     let application = new Application({
         _id: new mongoose.Types.ObjectId(),
@@ -18,7 +18,8 @@ router.post(Route.userID, authenticateAsClient, (request, response) => {
         resumeURL: request.body.resumeURL,
         offerID: request.body.offerID,
         phone: request.body.phone,
-        projects: request.body.projects
+        projects: request.body.projects,
+        companyID: request.body.companyID
     })
 
     application.save().then((application) => {

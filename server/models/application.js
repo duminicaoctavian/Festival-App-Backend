@@ -44,7 +44,11 @@ let ApplicationSchema = mongoose.Schema({
     dateApplied: {
 		type: Date,
 		default: Date.now
-	}
+    },
+    companyID: {
+        type: ObjectId,
+        ref: Reference.user
+    }
 })
 
 let Application = mongoose.model(ModelName.application, ApplicationSchema)
