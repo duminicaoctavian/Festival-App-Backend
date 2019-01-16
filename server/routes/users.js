@@ -27,6 +27,7 @@ let Feedback = {
 let router = express.Router()
 
 router.post(Route.default, async (request, response) => {
+
 	try {
 		let body = {
 			_id: new mongoose.Types.ObjectId(),
@@ -35,6 +36,8 @@ router.post(Route.default, async (request, response) => {
 			password: request.body.password,
 			imageURL: StoragePath.defaultProfilePictureURL,
 			artists: Array(),
+			offersAppliedTo: Array(),
+			type: request.body.type,
 			deviceToken: request.body.deviceToken
 		}
 
@@ -55,7 +58,6 @@ router.get(Route.me, authenticateAsClient, (request, response) => {
 router.post(Route.login, async (request, response) => {
 	try {
 		let body = _.pick(request.body, [
-			UserSerializationKey.user,
 			UserSerializationKey.email,
 			UserSerializationKey.password,
 			UserSerializationKey.deviceToken

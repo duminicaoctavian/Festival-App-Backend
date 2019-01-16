@@ -6,7 +6,9 @@ let UserSerializationKey = {
     email: 'email',
     imageURL: 'imageURL',
     artists: 'artists',
-    deviceToken: 'deviceToken'
+    deviceToken: 'deviceToken',
+    offersAppliedTo: 'offersAppliedTo',
+    type: 'type'
 }
 
 // API Routes
@@ -18,7 +20,17 @@ let APIRoute = {
     messages: '/messages',
     news: '/news',
     locations: '/locations',
-    questions: '/questions'
+    questions: '/questions',
+    offers: '/offers',
+    applications: '/applications'
+}
+
+// User Type
+let UserType = {
+    applicant: 'applicant',
+    student: 'student',
+    company: 'company',
+    university: 'university'
 }
 
 // Socket Events 
@@ -66,7 +78,9 @@ let ModelName = {
     news: 'News',
     product: 'Product',
     user: 'User',
-    question: 'Question'
+    question: 'Question',
+    offer: 'Offer',
+    application: 'Application'
 }
 
 // Document Methods
@@ -98,5 +112,6 @@ module.exports = {
     StoragePath,
     DateConstants,
     APIRoute,
-    SocketEvent
+    SocketEvent,
+    UserType
 }

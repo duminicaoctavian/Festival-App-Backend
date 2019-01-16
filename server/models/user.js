@@ -3,7 +3,7 @@ let validator = require('validator')
 let jwt = require('jsonwebtoken')
 let _ = require('lodash')
 let bcrypt = require('bcryptjs')
-let { ModelName, UserSerializationKey, DocumentMethod, AccessType } = require('./../utils/constants')
+let { ModelName, UserSerializationKey, DocumentMethod, AccessType, UserType } = require('./../utils/constants')
 
 // TODO - Access for other user types
 // TODO - Solve remaining magic strings
@@ -15,7 +15,8 @@ let ErrorMessage = {
 }
 
 let Reference = {
-	artist: 'Artist'
+	artist: 'Artist',
+	offer: 'Offer'
 }
 
 let ObjectID = mongoose.Schema.Types.ObjectId
@@ -57,11 +58,21 @@ let UserSchema = mongoose.Schema({
 			message: ErrorMessage.URL
 		}
 	},
-	artists: [{
+	offersAppliedTo: [{
 		type: ObjectID,
-		ref: Reference.artist,
+		ref: Reference.offer,
 		required: false
 	}],
+	type: {
+		type: String,
+		required: true,
+		trim: true
+	},
+	// artists: [{
+	// 	type: ObjectID,
+	// 	ref: Reference.artist,
+	// 	required: false
+	// }],
 	deviceToken: {
 		type: String,
 		required: false,
@@ -88,7 +99,8 @@ UserSchema.methods.toJSON = function () {
 		UserSerializationKey.username,
 		UserSerializationKey.email,
 		UserSerializationKey.imageURL,
-		UserSerializationKey.artists
+		UserSerializationKey.offersAppliedTo,
+		UserSerializationKey.type
 	])
 }
 
