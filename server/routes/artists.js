@@ -41,7 +41,7 @@ router.post(Route.default, (request, response) => {
 	})
 })
 
-router.get(Route.default, authenticateAsClient, (request, response) => {
+router.get(Route.default, (request, response) => {
 	Artist.find({}).sort('name').then((artists) => {
 		response.send({ artists })
 	}, (error) => {
