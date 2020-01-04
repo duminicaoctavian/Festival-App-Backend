@@ -41,7 +41,16 @@ var app = express()
 var server = http.createServer(app)
 let io = socketIO(server)
 
+let allowCrossDomain = (req, res, next) => {
+	req.header('Access-Control-Allow-Origin', "*")
+	req.header('Access-Control-Allow-Headers', "*")
+	res.header('Access-Control-Allow-Origin', "*")
+	res.header('Access-Control-Allow-Headers', "*")
+	next();
+}
+
 app.use(bodyParser.json())
+app.use(allowCrossDomain)
 app.use(APIRoute.products, productRoutes)
 app.use(APIRoute.artists, artistRoutes)
 app.use(APIRoute.users, usersRoutes)
@@ -87,12 +96,12 @@ io.on(SocketEvent.connection, (socket) => {
 		message.save(function (error, message) {
 			Channel.findOne({ _id: channelID }).then((channel) => {
 				let channelName = channel.name
-			
+
 				let notificationMessage = `${username} in #${channelName}: ${body}`
 				let payload = {
 					id: NotificationConstants.newMessageID
 				}
-	
+
 				User.find({}).then((users) => {
 					users.forEach((user) => {
 						if (user._id != userID) {
@@ -102,15 +111,15 @@ io.on(SocketEvent.connection, (socket) => {
 					})
 				})
 			})
-			
+
 			io.emit(SocketEvent.messageCreated, message.id, message.userID, message.channelID, message.body,
 				message.username, message.date)
 		})
 	})
 
-	socket.on(SocketEvent.newLocation, function (latitude, longitude, userID, title, address, 
+	socket.on(SocketEvent.newLocation, function (latitude, longitude, userID, title, address,
 		description, price, phone, images) {
-		
+
 		let location = new Location({
 			latitude,
 			longitude,
@@ -126,7 +135,7 @@ io.on(SocketEvent.connection, (socket) => {
 		console.log(location)
 
 		location.save(function (error, location) {
-			
+
 			let message = NotificationConstants.newLocationMessage
 			let payload = {
 				id: NotificationConstants.newLocationID
@@ -136,26 +145,26 @@ io.on(SocketEvent.connection, (socket) => {
 				users.forEach((user) => {
 					if (user._id != userID) {
 						let deviceToken = user.deviceToken
-					sendNotification(message, payload, deviceToken)
+						sendNotification(message, payload, deviceToken)
 					}
 				})
 			})
 
-			io.emit(SocketEvent.locationCreated, location._id, location.userID, location.latitude, 
-				location.longitude, location.title, location.address, 
+			io.emit(SocketEvent.locationCreated, location._id, location.userID, location.latitude,
+				location.longitude, location.title, location.address,
 				location.description, location.price, location.phone, location.images)
 		})
 	})
 
 	socket.on(SocketEvent.deleteLocation, function (id) {
-		Location.findOneAndRemove({ _id: id}, (error, location) => {
-			io.emit(SocketEvent.locationDeleted, location._id, location.userID, 
-				location.latitude, location.longitude, location.title, location.address, 
+		Location.findOneAndRemove({ _id: id }, (error, location) => {
+			io.emit(SocketEvent.locationDeleted, location._id, location.userID,
+				location.latitude, location.longitude, location.title, location.address,
 				location.description, location.price, location.phone, location.images)
 		})
 	})
 
-	socket.on(SocketEvent.updateLocation, function (id, latitude, longitude, userID, title, address, 
+	socket.on(SocketEvent.updateLocation, function (id, latitude, longitude, userID, title, address,
 		description, price, phone, images) {
 		let body = {
 			id,
@@ -172,7 +181,7 @@ io.on(SocketEvent.connection, (socket) => {
 
 		Location.findOneAndUpdate({ _id: id }, { $set: body }, { new: true }, (error, location, response) => {
 			io.emit(SocketEvent.locationUpdated, location._id, location.userID, location.latitude, location.longitude,
-			location.title, location.address, location.description, location.price, location.phone, location.images)
+				location.title, location.address, location.description, location.price, location.phone, location.images)
 		})
 	})
 })
